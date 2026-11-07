@@ -1499,10 +1499,10 @@
   =============================================== -->
   <section class="location-section">
     <!-- Holy Ceremony (holy_matrimony.png) -->
-    <div class="event-block reveal">
+    <div class="event-block reveal" id="ceremony-event-card">
       <img src="holy_matrimony.png" alt="Holy Ceremony" class="art-img church-art" />
       <h3 class="script-title event-heading">Holy Matrimony</h3>
-      <p class="event-time">3:30 PM</p>
+      <p class="event-time">2:30 PM</p>
       <p class="event-venue">The Unalome Venue</p>
       <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
       <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
@@ -1529,8 +1529,9 @@
       
       <div class="serpentine-container">
         
+
         <!-- 1. Ceremony (holy_matrimony.png) -->
-        <div class="serpentine-row reveal">
+        <div class="serpentine-row reveal" id="timeline-ceremony-node">
           <div class="serpentine-node">
             <img src="holy_matrimony.png" alt="Ceremony" />
           </div>
@@ -1804,64 +1805,161 @@
       }, 1800);
     }
 
-    /* Read ?guest= from URL and populate the envelope */
-    /* Read ?guest= and ?members= from URL and populate Invitation Plaque */
-    (function setPersonalizedGuest() {
-      const urlParams = new URLSearchParams(window.location.search);
-      let guest = urlParams.get('guest');
-      let members = urlParams.get('members');
+    /* ==========================================================
+       LIVE GOOGLE SHEET INTEGRATION (KYLE & KEVONA WEDDING)
+    ========================================================== */
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
+    
+    // Paste your Google Apps Script Web App URL from Step 2 here:
+    const GOOGLE_SCRIPT_WEBHOOK_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
 
-      const envTarget = document.getElementById('guestFamilyName');
-      const plaqueFamilyTarget = document.getElementById('plaqueFamilyTitle');
-      const memberListTarget = document.getElementById('plaqueMemberList');
-
-      // 1. Process Family Name
-      if (guest) {
-        guest = decodeURIComponent(guest.replace(/[_-]/g, ' ')).trim();
-        let formattedName = (!guest.toLowerCase().startsWith('the ') && !guest.toLowerCase().includes('family'))
-          ? `The ${guest} Family`
-          : guest;
-
-        if (envTarget) envTarget.textContent = formattedName;
-        if (plaqueFamilyTarget) plaqueFamilyTarget.textContent = formattedName;
-
-        const rsvpNameInput = document.querySelector('.modal-input[placeholder*="Guest Name"]');
-        if (rsvpNameInput) rsvpNameInput.value = formattedName;
-      } else {
-        if (envTarget) envTarget.textContent = 'Our Dearest Family & Friends';
-        if (plaqueFamilyTarget) plaqueFamilyTarget.textContent = 'Our Dearest Family & Friends';
-      }
-
-      // 2. Process Individual Members (e.g., ?members=Ricky,Mandy,Nigel)
-      if (members && memberListTarget) {
-        const memberArray = decodeURIComponent(members).split(',').map(m => m.trim());
-        memberListTarget.innerHTML = memberArray.map(name => `<span>${name}</span>`).join('');
-      } else if (!guest && memberListTarget) {
-        memberListTarget.innerHTML = `<span>We warmly invite you to join us</span>`;
-      }
-    })();
-
-    /* ==============================================
-       INDIVIDUAL GUEST RSVP TRACKER & GENERATOR
-    ============================================== */
+    let currentFamilyTitle = "Our Dearest Family & Friends";
+    let currentSurname = "";
+    let currentMemberList = ["Honoured Guest"];
+    let hasCeremonyInvite = true;
+    let currentRowId = null;
     const rsvpResponses = {};
 
-    function initFamilyRSVP() {
+    function parseCSVLine(line) {
+      const values = [];
+      let insideQuote = false;
+      let entry = "";
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"' || char === "'") {
+          insideQuote = !insideQuote;
+        } else if (char === ',' && !insideQuote) {
+          values.push(entry.trim());
+          entry = "";
+        } else {
+          entry += char;
+        }
+      }
+      values.push(entry.trim());
+      return values;
+    }
+
+    async function loadGuestDataFromSheet() {
       const urlParams = new URLSearchParams(window.location.search);
-      const membersParam = urlParams.get('members');
-      const container = document.getElementById('guestCardsContainer');
-      if (!container) return;
+      const rowIdParam = urlParams.get("id");
+      const searchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").toLowerCase().trim();
 
-      let guestList = [];
+      if (rowIdParam || searchSurname) {
+        try {
+          const res = await fetch(SHEET_CSV_URL);
+          const csvText = await res.text();
+          const lines = csvText.trim().split(/\r?\n/);
 
-      if (membersParam) {
-        guestList = decodeURIComponent(membersParam).split(',').map(m => m.trim()).filter(Boolean);
-      } else {
-        // Fallback default sample if opened without parameters
-        guestList = ['Ricky Govender', 'Mandy Govender', 'Nigel Govender'];
+          // Find row with headers "Name", "Surname", "Family Members"
+          let headerIndex = lines.findIndex(l => {
+            const lower = l.toLowerCase();
+            return lower.includes("surname") && lower.includes("family members");
+          });
+          if (headerIndex === -1) headerIndex = 2; // Row 3 in sheet is index 2
+
+          const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
+
+          // 1. Direct row match if ?id= is passed
+          let matchedRow = null;
+          if (rowIdParam && !isNaN(rowIdParam)) {
+            const targetIndex = parseInt(rowIdParam, 10) - 1; // Convert 1-based row to 0-based index
+            if (lines[targetIndex]) {
+              const vals = parseCSVLine(lines[targetIndex]);
+              matchedRow = {};
+              rawHeaders.forEach((h, idx) => matchedRow[h] = vals[idx] || "");
+              currentRowId = rowIdParam;
+            }
+          }
+
+          // 2. Fallback match by surname
+          if (!matchedRow && searchSurname) {
+            for (let i = headerIndex + 1; i < lines.length; i++) {
+              const vals = parseCSVLine(lines[i]);
+              const row = {};
+              rawHeaders.forEach((h, idx) => row[h] = vals[idx] || "");
+
+              const rowSurname = (row["surname"] || "").toLowerCase().trim();
+              const rowName = (row["name"] || "").toLowerCase().trim();
+
+              if (rowSurname === searchSurname || rowName === searchSurname) {
+                matchedRow = row;
+                currentRowId = i + 1;
+                break;
+              }
+            }
+          }
+
+          if (matchedRow) {
+            const surnameVal = matchedRow["surname"] ? matchedRow["surname"].trim() : "";
+            const primaryName = matchedRow["name"] ? matchedRow["name"].trim() : "";
+            const rawMembers = matchedRow["family members"] || "";
+            const ceremonyVal = (matchedRow["ceremony"] || "").toLowerCase().trim();
+
+            currentSurname = surnameVal;
+
+            // Envelope & Plaque Title: "______ Family Invitation"
+            if (surnameVal) {
+              currentFamilyTitle = `${surnameVal} Family Invitation`;
+            } else if (primaryName) {
+              currentFamilyTitle = `${primaryName} Family Invitation`;
+            }
+
+            // Combine Primary Guest + Family Members
+            const members = [];
+            if (primaryName) members.push(primaryName);
+            if (rawMembers) {
+              rawMembers.split(/[,&]/).forEach(m => {
+                const clean = m.trim();
+                if (clean && !members.some(e => e.toLowerCase() === clean.toLowerCase())) {
+                  members.push(clean);
+                }
+              });
+            }
+            if (members.length > 0) currentMemberList = members;
+
+            // Only 'yes' shows Holy Matrimony
+            hasCeremonyInvite = (ceremonyVal === "yes");
+          }
+        } catch (err) {
+          console.warn("Could not load Google Sheet data. Falling back to defaults.", err);
+        }
       }
 
-      container.innerHTML = guestList.map((name, index) => `
+      updateEnvelopeAndPlaque();
+      updateCeremonyVisibility();
+      renderFamilyRSVP();
+    }
+
+    function updateEnvelopeAndPlaque() {
+      const envTarget = document.getElementById("guestFamilyName");
+      const plaqueTitle = document.getElementById("plaqueFamilyTitle");
+      const plaqueMembers = document.getElementById("plaqueMemberList");
+
+      if (envTarget) envTarget.textContent = currentFamilyTitle;
+      if (plaqueTitle) plaqueTitle.textContent = currentFamilyTitle;
+      if (plaqueMembers) {
+        plaqueMembers.innerHTML = currentMemberList.map(name => `<span>${name}</span>`).join("");
+      }
+    }
+
+    function updateCeremonyVisibility() {
+      const ceremonyCard = document.getElementById("ceremony-event-card");
+      const ceremonyTimeline = document.getElementById("timeline-ceremony-node");
+
+      if (!hasCeremonyInvite) {
+        if (ceremonyCard) ceremonyCard.style.display = "none";
+        if (ceremonyTimeline) ceremonyTimeline.style.display = "none";
+      } else {
+        if (ceremonyCard) ceremonyCard.style.display = "";
+        if (ceremonyTimeline) ceremonyTimeline.style.display = "";
+      }
+    }
+
+    function renderFamilyRSVP() {
+      const container = document.getElementById("guestCardsContainer");
+      if (!container) return;
+
+      container.innerHTML = currentMemberList.map((name, index) => `
         <div class="guest-rsvp-card">
           <span class="guest-name-label">${name}</span>
           <div class="rsvp-button-pair">
@@ -1879,7 +1977,7 @@
             </button>
           </div>
         </div>
-      `).join('');
+      `).join("");
     }
 
     function setGuestResponse(name, status, index) {
@@ -1897,26 +1995,46 @@
       }
 
       const answeredCount = Object.keys(rsvpResponses).length;
-      const totalCount = document.querySelectorAll('.guest-rsvp-card').length;
-      document.getElementById('rsvpStatusMsg').textContent = `${answeredCount} of ${totalCount} responses selected.`;
+      document.getElementById('rsvpStatusMsg').textContent = `${answeredCount} of ${currentMemberList.length} responses selected.`;
     }
 
-    function sendFamilyRSVP() {
-      const totalCount = document.querySelectorAll('.guest-rsvp-card').length;
-      const answeredCount = Object.keys(rsvpResponses).length;
-
-      if (answeredCount < totalCount) {
+    async function sendFamilyRSVP() {
+      if (Object.keys(rsvpResponses).length < currentMemberList.length) {
         alert("Please make a selection (Accept or Decline) for all invited family members before submitting.");
         return;
       }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const familyName = urlParams.get('guest') || 'Wedding Guest';
+      const submitBtn = document.getElementById("submitRsvpBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Recording RSVP...";
+
+      // Filter only members who joyfully accepted
+      const attendingMembers = Object.keys(rsvpResponses).filter(
+        name => rsvpResponses[name] === "Attending"
+      );
+
+      // Post attending list directly to Google Sheet column G
+      if (GOOGLE_SCRIPT_WEBHOOK_URL && GOOGLE_SCRIPT_WEBHOOK_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
+        try {
+          await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              rowId: currentRowId,
+              surname: currentSurname || currentFamilyTitle,
+              attendingMembers: attendingMembers.length > 0 ? attendingMembers : ["None (All Declined)"]
+            })
+          });
+        } catch (err) {
+          console.warn("Could not post to sheet webhook:", err);
+        }
+      }
+
       const dietary = document.getElementById('rsvpDietary').value.trim();
       const phone = document.getElementById('rsvpContact').value.trim();
 
-      // Format response text
-      let summaryText = `*Wedding RSVP - ${decodeURIComponent(familyName)}*\n\n`;
+      let summaryText = `*Wedding RSVP - ${currentFamilyTitle}*\n\n`;
       for (const [name, status] of Object.entries(rsvpResponses)) {
         summaryText += `• ${name}: ${status === 'Attending' ? '✅ Joyfully Accepts' : '❌ Regretfully Declines'}\n`;
       }
@@ -1924,20 +2042,19 @@
       if (dietary) summaryText += `\n*Dietary/Notes:* ${dietary}`;
       if (phone) summaryText += `\n*Contact:* ${phone}`;
 
-      // OPTION A: Open WhatsApp prefilled with Kyle/Kevona's wedding organizer number
-      // Replace with your South African international number (e.g., 27821234567)
+      // Kyle & Kevona organizer WhatsApp number (country code 27 for South Africa)
       const organizerWhatsApp = "27821234567";
       const whatsappURL = `https://wa.me/${organizerWhatsApp}?text=${encodeURIComponent(summaryText)}`;
 
-      // Confirmation feedback
-      document.getElementById('rsvpStatusMsg').textContent = "Response recorded! Redirecting to confirm...";
-      
-      // Opens WhatsApp to deliver the exact RSVP
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Family RSVP";
+      document.getElementById('rsvpStatusMsg').textContent = "RSVP recorded! Opening WhatsApp...";
+
       window.open(whatsappURL, '_blank');
     }
 
-    // Call after DOM loads
-    window.addEventListener('DOMContentLoaded', initFamilyRSVP);
+    // Initialize immediately on load
+    window.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
 
   </script>
 </body>
