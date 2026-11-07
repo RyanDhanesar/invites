@@ -934,7 +934,11 @@
       background: transparent !important;
     }
 
-    /* Shared Authentic Paper Texture on all flaps */
+    /* ==============================================
+       GPU-ACCELERATED MOBILE-OPTIMIZED FLAPS
+    ============================================== */
+
+    /* Force hardware composition on all flaps */
     .env-flap-left,
     .env-flap-right,
     .env-flap-bottom,
@@ -945,9 +949,15 @@
         url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperFibers'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='6' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='2.2' result='light'%3E%3CfeDistantLight azimuth='55' elevation='58'/%3E%3C/feDiffuseLighting%3E%3CfeBlend mode='multiply' in='SourceGraphic' in2='light'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFibers)' fill='%23ede4d3'/%3E%3C/svg%3E");
       background-size: 260px 260px;
       background-repeat: repeat;
+      
+      /* GPU Acceleration Flags */
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
 
-    /* 1. TOP FLAP: Drops deep natural shadow across the V-point onto the bottom/side flaps */
+    /* 1. TOP FLAP: Natural crease with zero drop-shadow lag */
     .env-flap-top {
       position: absolute;
       top: -1px;
@@ -957,11 +967,11 @@
       clip-path: polygon(0 0, 100% 0, 50% 100%);
       transform-origin: top center;
       z-index: 5;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      filter: drop-shadow(0 14px 18px rgba(50, 35, 15, 0.35)) brightness(1.02);
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 10px 24px rgba(60, 42, 18, 0.22);
     }
 
-    /* 2. BOTTOM FLAP: Casts a soft upward crease shadow beneath the sides */
+    /* 2. BOTTOM FLAP */
     .env-flap-bottom {
       position: absolute;
       bottom: -1px;
@@ -971,11 +981,11 @@
       clip-path: polygon(0 100%, 50% 0, 100% 100%);
       transform-origin: bottom center;
       z-index: 4;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      filter: drop-shadow(0 -8px 14px rgba(50, 35, 15, 0.22)) brightness(0.97);
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 -8px 20px rgba(60, 42, 18, 0.16);
     }
 
-    /* 3. LEFT FLAP: Bleeds 2px past left border to eliminate any white subpixel gap */
+    /* 3. LEFT FLAP */
     .env-flap-left {
       position: absolute;
       top: -1px;
@@ -985,11 +995,11 @@
       clip-path: polygon(0 0, 100% 50%, 0 100%);
       transform-origin: left center;
       z-index: 3;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      filter: drop-shadow(6px 0 12px rgba(50, 35, 15, 0.18)) brightness(0.98);
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 5px 0 16px rgba(60, 42, 18, 0.12);
     }
 
-    /* 4. RIGHT FLAP: Bleeds 2px past right border */
+    /* 4. RIGHT FLAP */
     .env-flap-right {
       position: absolute;
       top: -1px;
@@ -999,11 +1009,11 @@
       clip-path: polygon(100% 0, 0 50%, 100% 100%);
       transform-origin: right center;
       z-index: 3;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      filter: drop-shadow(-6px 0 12px rgba(50, 35, 15, 0.18)) brightness(0.96);
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: -5px 0 16px rgba(60, 42, 18, 0.12);
     }
 
-    /* Centered Antique Gold Wax Seal */
+    /* Wax Seal Button Optimization */
     .env-seal-button {
       position: absolute;
       top: 50%;
@@ -1019,12 +1029,13 @@
       justify-content: center;
       border: none;
       background: transparent;
-      box-shadow: 
-        0 18px 36px rgba(45, 28, 10, 0.5), 
-        0 4px 10px rgba(0, 0, 0, 0.25);
-      transition: transform 0.35s cubic-bezier(0.35, 0, 0.25, 1), opacity 0.35s ease;
+      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      will-change: transform, opacity;
       overflow: hidden;
     }
+
+   
 
     .seal-graphic-img {
       width: 120%;
@@ -1236,10 +1247,11 @@
       <div class="env-flap-bottom"></div>
       <div class="env-flap-top" id="envFlap"></div>
 
-      <!-- Personalized Dynamic Guest Plaque -->
-      <div class="env-guest-callout" id="envGuestBox">
-        <span class="guest-pretitle">A special invitation for</span>
-        <h2 class="guest-family-name" id="guestFamilyName">Our Dearest Family &amp; Friends</h2>
+      <p class="plaque-eyebrow">Especially Invited</p>
+      <h2 class="plaque-family-target" id="plaqueFamilyTitle">Our Dearest Family &amp; Friends</h2>
+      
+      <div class="plaque-individual-names" id="plaqueMemberList">
+        <span>Honoured Guests</span>
       </div>
 
       <!-- Centered Gold Seal -->
