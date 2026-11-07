@@ -3,23 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#5B6651" />
+  <meta name="theme-color" content="#dac9aa" />
   <title>Kyle &amp; Kevona — Wedding Celebration</title>
   
   <!-- Curated Luxury Editorial Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --sage-olive: #606B56;
-      --sage-dark: #475040;
-      --paper-cream: #F9F8F5;
-      --paper-white: #FFFFFF;
-      --text-dark: #2B2C28;
-      --text-muted: #6E7069;
-      --border-thin: rgba(96, 107, 86, 0.28);
+      --gold: #b49358;
+      --gold-light: #d8c6a5;
+      --gold-dark: #815d29;
+      --ivory: #f8f4ec;
+      --sand-bg: #eee7db;
+      --panel-warm: #eee5d7;
+      --env-beige: #dac9aa;
+      --env-shade: #c8b594;
+      --env-dark: #bba480;
+      --text-dark: #574630;
+      --text-muted: #82735d;
+      --border-thin: rgba(180, 147, 88, 0.35);
     }
 
     * {
@@ -30,19 +35,19 @@
     }
 
     html {
-      background-color: #1F231D;
+      background-color: var(--sand-bg);
       color: var(--text-dark);
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Cormorant Garamond', Georgia, serif;
       scroll-behavior: smooth;
     }
 
     body {
-      background: var(--paper-cream);
+      background: var(--ivory);
       max-width: 440px;
       margin: 0 auto;
       min-height: 100vh;
       overflow-x: hidden;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 0 50px rgba(96, 69, 29, 0.18);
       position: relative;
     }
 
@@ -66,7 +71,7 @@
     }
 
     .sans-caps {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.24em;
       font-size: 0.65rem;
@@ -87,11 +92,11 @@
     }
 
     /* -------------------------------------------
-       1. ENVELOPE TOP FOLD BANNER
+       1. ENVELOPE TOP FOLD BANNER (WARM BEIGE & GOLD)
     -------------------------------------------- */
     .env-header {
-      background: var(--sage-olive);
-      color: #FFFFFF;
+      background: linear-gradient(180deg, #dac9aa 0%, #c9b592 100%);
+      color: var(--text-dark);
       padding: calc(3.2rem + env(safe-area-inset-top)) 1.5rem 3.5rem;
       text-align: center;
       position: relative;
@@ -104,29 +109,30 @@
       left: 0;
       width: 100%;
       height: 38px;
-      background: var(--paper-cream);
+      background: var(--ivory);
       clip-path: polygon(0 100%, 50% 0, 100% 100%);
     }
 
     .env-names {
       font-size: 3.6rem;
       letter-spacing: 0.02em;
+      color: var(--text-dark);
     }
 
     .env-ampersand {
       font-size: 2.2rem;
       display: block;
       margin: -0.4rem 0;
-      opacity: 0.85;
+      color: var(--gold-dark);
     }
 
     .env-date {
       margin-top: 1.8rem;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       letter-spacing: 0.32em;
       font-size: 0.76rem;
-      font-weight: 300;
-      color: #E2E6DF;
+      font-weight: 500;
+      color: var(--text-muted);
     }
 
     /* -------------------------------------------
@@ -142,7 +148,8 @@
       height: 380px;
       border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 25px rgba(96, 69, 29, 0.12);
+      border: 1px solid var(--border-thin);
     }
 
     .photo-frame img {
@@ -181,7 +188,7 @@
       align-items: center;
       justify-content: center;
       gap: 1.25rem;
-      color: var(--sage-olive);
+      color: var(--text-dark);
       margin-bottom: 0.6rem;
     }
 
@@ -189,7 +196,7 @@
       background: none;
       border: none;
       cursor: pointer;
-      color: var(--sage-olive);
+      color: var(--text-dark);
       display: flex;
       align-items: center;
     }
@@ -198,19 +205,21 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background: var(--sage-olive);
+      background: linear-gradient(120deg, #cbaa70, #96713b);
       color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(96, 107, 86, 0.25);
+      box-shadow: 0 4px 10px rgba(180, 147, 88, 0.35);
+      border: none;
+      cursor: pointer;
     }
 
     .progress-track {
       width: 100%;
       max-width: 220px;
       height: 2px;
-      background: rgba(96, 107, 86, 0.2);
+      background: rgba(180, 147, 88, 0.25);
       margin: 0 auto;
       position: relative;
     }
@@ -218,31 +227,33 @@
     .progress-fill {
       width: 38%;
       height: 100%;
-      background: var(--sage-olive);
+      background: var(--gold);
     }
 
     /* -------------------------------------------
-       4. OLIVE PANEL (Countdown & Calendar)
+       4. WARM SAND PANEL (Countdown & Calendar)
     -------------------------------------------- */
     .olive-panel {
-      background: var(--sage-olive);
-      color: #FFFFFF;
+      background: var(--sand-bg);
+      color: var(--text-dark);
       padding: 3rem 1.75rem;
       text-align: center;
+      border-top: 1px solid var(--border-thin);
+      border-bottom: 1px solid var(--border-thin);
     }
 
     .panel-blessing {
       font-size: 1.05rem;
       font-style: italic;
-      color: #E7EBE2;
+      color: var(--text-dark);
       line-height: 1.5;
       max-width: 300px;
       margin: 0 auto 2rem;
     }
 
     .date-badge-box {
-      border-top: 1px solid rgba(255, 255, 255, 0.25);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+      border-top: 1px solid var(--border-thin);
+      border-bottom: 1px solid var(--border-thin);
       padding: 0.85rem 0;
       display: flex;
       align-items: center;
@@ -255,15 +266,15 @@
       font-size: 2.8rem;
       font-family: 'Alex Brush', cursive;
       line-height: 0.8;
-      color: #FFFFFF;
+      color: var(--gold-dark);
     }
 
     .countdown-title {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       letter-spacing: 0.35em;
       font-size: 0.72rem;
       text-transform: uppercase;
-      color: #E2E6DF;
+      color: var(--text-muted);
       margin-bottom: 0.85rem;
     }
 
@@ -271,9 +282,10 @@
       display: flex;
       justify-content: center;
       gap: 1rem;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 2rem;
       line-height: 1;
+      color: var(--text-dark);
     }
 
     .countdown-col {
@@ -284,18 +296,18 @@
     }
 
     .countdown-sub {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.55rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       margin-top: 0.4rem;
-      color: #C7CEBF;
+      color: var(--text-muted);
     }
 
     .calendar-wrap {
       margin-top: 2.5rem;
       padding-top: 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      border-top: 1px solid var(--border-thin);
     }
 
     .calendar-table {
@@ -303,26 +315,26 @@
       max-width: 280px;
       margin: 1.25rem auto 0;
       border-collapse: collapse;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.68rem;
     }
 
     .calendar-table th {
-      color: #D2D8CC;
-      font-weight: 400;
+      color: var(--text-muted);
+      font-weight: 500;
       padding-bottom: 0.6rem;
       font-size: 0.6rem;
     }
 
     .calendar-table td {
       padding: 0.4rem 0.2rem;
-      color: #FFFFFF;
-      font-weight: 300;
+      color: var(--text-dark);
+      font-weight: 400;
     }
 
     .calendar-table .active-day {
-      background: #FFFFFF;
-      color: var(--sage-olive);
+      background: linear-gradient(120deg, #cbaa70, #96713b);
+      color: #FFFFFF;
       font-weight: 600;
       border-radius: 50%;
       display: inline-flex;
@@ -330,6 +342,7 @@
       justify-content: center;
       width: 24px;
       height: 24px;
+      box-shadow: 0 2px 6px rgba(180, 147, 88, 0.4);
     }
 
     /* -------------------------------------------
@@ -368,15 +381,15 @@
     }
 
     .event-time {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.1em;
-      color: var(--sage-olive);
+      color: var(--gold-dark);
     }
 
     .event-venue {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.72rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
@@ -394,22 +407,23 @@
 
     .btn-pill {
       display: inline-block;
-      padding: 0.4rem 1.4rem;
-      border: 1px solid var(--border-thin);
+      padding: 0.45rem 1.5rem;
+      border: 1px solid var(--gold);
       border-radius: 20px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.65rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--text-dark);
       text-decoration: none;
       transition: all 0.25s ease;
+      background: #faf8f3;
     }
 
     .btn-pill:hover, .btn-pill:active {
-      background: var(--sage-olive);
+      background: var(--text-dark);
       color: #FFFFFF;
-      border-color: var(--sage-olive);
+      border-color: var(--text-dark);
     }
 
     /* -------------------------------------------
@@ -423,6 +437,7 @@
     .timeline-title {
       font-size: 2.6rem;
       margin-bottom: 2rem;
+      color: var(--text-dark);
     }
 
     .serpentine-container {
@@ -439,7 +454,8 @@
       left: 50%;
       transform: translateX(-50%);
       width: 1px;
-      background: rgba(96, 107, 86, 0.35);
+      background: var(--gold);
+      opacity: 0.4;
     }
 
     .serpentine-row {
@@ -455,7 +471,7 @@
       height: 58px;
       border-radius: 50%;
       background: #FFFFFF;
-      border: 1.2px solid var(--border-thin);
+      border: 1.5px solid var(--gold-light);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -463,7 +479,7 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 2;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      box-shadow: 0 4px 12px rgba(96, 69, 29, 0.08);
       overflow: hidden;
       padding: 8px;
     }
@@ -477,7 +493,7 @@
 
     .serpentine-meta {
       width: 38%;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
     }
 
     .serpentine-meta.left {
@@ -495,7 +511,7 @@
       font-size: 0.65rem;
       letter-spacing: 0.1em;
       font-weight: 600;
-      color: var(--sage-olive);
+      color: var(--gold-dark);
       display: block;
     }
 
@@ -509,26 +525,28 @@
     }
 
     /* -------------------------------------------
-       7. DRESS CODE (dress_code.png)
+       7. DRESS CODE (WARM LINEN FILL)
     -------------------------------------------- */
     .dress-code-section {
       padding: 2.5rem 1.75rem;
       text-align: center;
-      border-top: 1px solid rgba(96, 107, 86, 0.15);
+      border-top: 1px solid var(--border-thin);
+      background: var(--panel-warm);
     }
 
     .dress-heading {
       font-size: 2.4rem;
       margin-bottom: 0.25rem;
+      color: var(--text-dark);
     }
 
     .attire-type {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.78rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--sage-olive);
-      font-weight: 500;
+      color: var(--gold-dark);
+      font-weight: 600;
     }
 
     .dress-img-wrap {
@@ -553,90 +571,318 @@
       line-height: 1.45;
     }
 
-    /* -------------------------------------------
-       8. GIFT REGISTRY & QR CODE
-    -------------------------------------------- */
-    .registry-panel {
-      background: var(--sage-olive);
-      color: #FFFFFF;
-      padding: 3rem 1.75rem;
+    /* ==============================================
+       DRESS CODE COLOR SWATCHES
+    ============================================== */
+    /* ==============================================
+       DRESS CODE COLOR SWATCHES (BALANCED SINGLE ROW)
+    ============================================== */
+    /* ==============================================
+       DRESS CODE COLOR SWATCHES (HORIZONTAL ROW)
+    ============================================== */
+    .swatch-container {
+      margin: 1.5rem auto 1.25rem;
+      width: 100%;
+      max-width: 360px;
+      padding: 0 0.25rem;
+      box-sizing: border-box;
+    }
+
+    .swatch-eyebrow {
+      display: block;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 0.9rem;
+      font-weight: 500;
       text-align: center;
     }
 
-    .registry-icon {
-      width: 44px;
-      height: 44px;
-      stroke: #FFFFFF;
-      fill: none;
-      stroke-width: 1.5;
-      margin: 0 auto 0.5rem;
+    /* Force a strict single horizontal flex line */
+    .swatch-grid {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      justify-content: space-between !important;
+      align-items: flex-start !important;
+      width: 100%;
+      gap: 4px;
     }
 
-    .registry-title {
-      font-size: 2.6rem;
-      margin-bottom: 0.35rem;
+    .swatch-item {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
-    .registry-desc {
-      font-size: 1rem;
-      font-style: italic;
-      color: #E2E6DF;
-      max-width: 290px;
-      margin: 0 auto 1.5rem;
-      line-height: 1.45;
-    }
-
-    .qr-card {
-      background: #FFFFFF;
-      padding: 1.25rem;
-      border-radius: 8px;
-      display: inline-block;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    .qr-img {
-      width: 140px;
-      height: 140px;
+    .swatch-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      box-shadow: 0 3px 8px rgba(96, 69, 29, 0.12);
+      border: 1px solid rgba(180, 147, 88, 0.45);
+      flex-shrink: 0;
       display: block;
     }
 
+    .swatch-name {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.46rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      line-height: 1.2;
+      text-align: center;
+      width: 100%;
+      display: block;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .swatch-item:hover .swatch-circle {
+      transform: translateY(-2px) scale(1.06);
+    }
+
+
     /* -------------------------------------------
-       9. CONFIRMATION / RSVP
+       9. CONFIRMATION / RSVP (DEEP WARM TAUPE)
     -------------------------------------------- */
     .rsvp-panel {
-      background: var(--sage-dark);
+      background: #4a3c2b;
       color: #FFFFFF;
       padding: 2.8rem 1.75rem;
       text-align: center;
     }
 
-    .rsvp-icon {
-      width: 38px;
-      height: 38px;
-      stroke: #FFFFFF;
-      fill: none;
-      stroke-width: 1.5;
+    .rsvp-envelope-art {
+      width: 110px;
+      height: 110px;
       margin: 0 auto 0.5rem;
+      display: block;
+      object-fit: contain;
+      mix-blend-mode: screen;
     }
 
     .rsvp-title {
       font-size: 2.6rem;
       margin-bottom: 0.35rem;
+      color: #FFFFFF;
     }
 
     .rsvp-deadline {
       font-size: 0.95rem;
       font-style: italic;
-      color: #D6DDD0;
+      color: var(--gold-light);
       margin-bottom: 1.25rem;
+    }
+
+    /* ==============================================
+       REFINED EDITORIAL RSVP (NO GRADIENTS)
+    ============================================== */
+    .rsvp-section {
+      padding: 3.5rem 1.5rem 3rem;
+      background: var(--sand-bg);
+      text-align: center;
+      border-top: 1px solid var(--border-thin);
+    }
+
+    .rsvp-ornament {
+      font-size: 18px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .rsvp-eyebrow {
+      display: block;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .rsvp-title {
+      font-family: 'Alex Brush', cursive;
+      font-size: 3.4rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+    }
+
+    .rsvp-subnote {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.4;
+    }
+
+    /* Guest Card - Clean flat stationery border */
+    .guest-rsvp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      max-width: 380px;
+      margin: 0 auto 1.6rem;
+    }
+
+    .guest-rsvp-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(180, 147, 88, 0.28);
+      border-radius: 6px;
+      padding: 1.1rem 1rem;
+      box-shadow: 0 2px 10px rgba(96, 69, 29, 0.04);
+      text-align: center;
+      transition: border-color 0.25s ease;
+    }
+
+    .guest-rsvp-card:focus-within {
+      border-color: var(--gold);
+    }
+
+    .guest-name-label {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 0.75rem;
+      display: block;
+      letter-spacing: 0.02em;
+    }
+
+    /* Flat Button Pair - Clean & Tactile */
+    .rsvp-button-pair {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .choice-btn {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
+      border: 1px solid rgba(180, 147, 88, 0.35);
+      background: #FAF8F5; /* Pure flat off-white */
+      color: var(--text-dark);
+      border-radius: 4px; /* Crisp tailored corners */
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--gold);
+    }
+
+    /* Flat Active State: Joyfully Accept (Warm Deep Gold/Ochre) */
+    .choice-btn.accept.active {
+      background: #96713B; /* Flat solid gold */
+      border-color: #96713B;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* Flat Active State: Regretfully Decline (Muted Taupe) */
+    .choice-btn.decline.active {
+      background: #82735D; /* Flat solid taupe */
+      border-color: #82735D;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* Extra Text Fields - Minimal underline style */
+    .rsvp-extra-fields {
+      max-width: 380px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .rsvp-text-input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 4px;
+      border: 1px solid rgba(180, 147, 88, 0.3);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.05rem;
+      background: #FFFFFF;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .rsvp-text-input::placeholder {
+      color: #A39683;
+      font-style: italic;
+    }
+
+    .rsvp-text-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(180, 147, 88, 0.15);
+    }
+
+    /* Primary Flat Action Button */
+    .btn-rsvp-submit {
+      display: inline-block;
+      width: 100%;
+      max-width: 380px;
+      padding: 0.95rem 1.5rem;
+      background: #574630; /* Solid classic walnut */
+      color: #F8F4EC;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 4px;
+      border: 1px solid #574630;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(87, 70, 48, 0.15);
+      transition: background 0.25s ease, transform 0.15s ease;
+    }
+
+    .btn-rsvp-submit:hover {
+      background: #433523;
+      border-color: #433523;
+    }
+
+    .btn-rsvp-submit:active {
+      transform: scale(0.98);
+    }
+
+    .rsvp-status-msg {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-top: 1rem;
+      min-height: 18px;
     }
 
     .btn-confirm {
       display: inline-block;
       padding: 0.8rem 2.2rem;
-      background: #FFFFFF;
-      color: var(--sage-dark);
-      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(110deg, #9b7338, #e1c389, #a78043, #d5b577, #9b7338);
+      background-size: 250% 100%;
+      color: #FFFFFF;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.72rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -644,8 +890,9 @@
       border-radius: 25px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
       transition: all 0.2s ease;
+      text-shadow: 0 1px 2px rgba(60, 40, 15, 0.4);
     }
 
     .btn-confirm:active {
@@ -655,43 +902,23 @@
     /* -------------------------------------------
        10. RECEPTION ETIQUETTE & CLOSING
     -------------------------------------------- */
+    /* -------------------------------------------
+       10. RECEPTION ETIQUETTE & CLOSING
+    -------------------------------------------- */
     .etiquette-section {
-      padding: 3rem 1.75rem 2.5rem;
+      padding: 1.5rem 1.75rem 2.5rem; /* Cut top padding down from 3rem */
       text-align: center;
-    }
-
-    .etiquette-badge {
-      font-size: 1.5rem;
-      color: var(--sage-olive);
-      margin-bottom: 0.25rem;
-    }
-
-    .etiquette-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--text-dark);
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .etiquette-text {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      max-width: 290px;
-      margin: 0 auto 1.5rem;
+      background: var(--ivory);
     }
 
     .closing-thanks {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(96, 107, 86, 0.2);
+      margin-top: 0.5rem; /* Reduced from 2rem */
+      padding-top: 1rem;  /* Reduced from 1.5rem */
+      border-top: 1px solid var(--border-thin);
     }
 
     .closing-msg {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.65rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
@@ -701,7 +928,7 @@
 
     .closing-script {
       font-size: 2.8rem;
-      color: var(--sage-olive);
+      color: var(--gold-dark);
     }
 
     /* -------------------------------------------
@@ -710,7 +937,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(87, 70, 48, 0.7);
       backdrop-filter: blur(4px);
       z-index: 10000;
       display: flex;
@@ -728,14 +955,15 @@
     }
 
     .modal-card {
-      background: #FFFFFF;
+      background: var(--ivory);
       width: 100%;
       max-width: 360px;
       border-radius: 12px;
       padding: 2rem 1.5rem;
       text-align: center;
       position: relative;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      border: 1px solid var(--gold-light);
     }
 
     .modal-close {
@@ -753,28 +981,72 @@
       width: 100%;
       padding: 0.85rem;
       font-size: 16px;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Cormorant Garamond', Georgia, serif;
       border: 1px solid var(--border-thin);
       border-radius: 6px;
       margin-bottom: 0.85rem;
       outline: none;
+      background: #FFFFFF;
+      color: var(--text-dark);
     }
 
     .modal-input:focus {
-      border-color: var(--sage-olive);
+      border-color: var(--gold);
     }
 
-    .rsvp-envelope-art {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 0.5rem;
+    /* Personalized Guest Callout on Envelope Front */
+    .env-guest-callout {
+      position: absolute;
+      top: 26%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      max-width: 340px;
+      text-align: center;
+      z-index: 6; /* Sits above flaps, under the seal */
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .guest-pretitle {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
       display: block;
-      object-fit: contain;
-      mix-blend-mode: screen; /* Drops the black background completely on dark sections */
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+
+    .guest-family-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.8rem, 5.5vw, 2.3rem);
+      font-style: italic;
+      color: var(--text-dark);
+      line-height: 1.15;
+      font-weight: 500;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .guest-gold-accent {
+      font-size: 1rem;
+      color: var(--gold);
+      margin-top: 0.25rem;
+      opacity: 0.85;
+    }
+
+    /* Fades the name out smoothly as flaps open */
+    .envelope-wrapper.open .env-guest-callout {
+      opacity: 0;
+      transform: translate(-50%, -65%) scale(0.95);
     }
 
     /* ==============================================
-       SEAMLESS 4-FLAP UNWRAP (REVEALS LIVE INVITE DIRECTLY)
+       SEAMLESS 4-FLAP UNWRAP (WARM BEIGE PALETTE)
+    ============================================== */
+    /* ==============================================
+       REALISTIC TEXTURED 3D ENVELOPE (BEIGE)
     ============================================== */
     #envelope-overlay {
       position: fixed;
@@ -786,12 +1058,12 @@
       z-index: 99999;
       perspective: 1600px;
       overflow: hidden;
-      background: transparent; /* Transparent so live invite is directly beneath */
+      background: transparent;
       pointer-events: auto;
     }
 
     #envelope-overlay.unwrapped {
-      pointer-events: none; /* Allows guest to immediately scroll the invite */
+      pointer-events: none;
     }
 
     .envelope-wrapper {
@@ -804,6 +1076,20 @@
       background: transparent;
     }
 
+    /* Natural Paper Texture Overlay across all flaps */
+    .env-flap-left::after,
+    .env-flap-right::after,
+    .env-flap-bottom::after,
+    .env-flap-top::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.12; /* Subtle paper grain visible on color */
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23fff' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
+    }
+
     /* 1. TOP FLAP: Folds upward 180° around the top edge */
     .env-flap-top {
       position: absolute;
@@ -812,11 +1098,15 @@
       width: 100%;
       height: 50.2%;
       clip-path: polygon(0 0, 100% 0, 50% 100%);
-      background: linear-gradient(180deg, #475040 0%, #606B56 100%);
+      background: linear-gradient(180deg, #c5b290 0%, #dac9aa 100%);
       transform-origin: top center;
       z-index: 5;
       transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      
+      /* Multi-layered shadows for paper thickness and depth */
+      box-shadow: 0 10px 25px rgba(96, 69, 29, 0.28), 
+                  inset 0 -1px 3px rgba(255, 255, 255, 0.4),
+                  inset 0 3px 5px rgba(0, 0, 0, 0.1);
     }
 
     /* 2. BOTTOM FLAP: Folds downward 180° around the bottom edge */
@@ -827,11 +1117,14 @@
       width: 100%;
       height: 50.2%;
       clip-path: polygon(0 100%, 50% 0, 100% 100%);
-      background: linear-gradient(0deg, #3C4435 0%, #58634F 100%);
+      background: linear-gradient(0deg, #baaa8c 0%, #cebe9f 100%);
       transform-origin: bottom center;
       z-index: 4;
       transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.25);
+      
+      box-shadow: 0 -10px 25px rgba(96, 69, 29, 0.2),
+                  inset 0 1px 3px rgba(255, 255, 255, 0.3),
+                  inset 0 -3px 5px rgba(0, 0, 0, 0.15);
     }
 
     /* 3. LEFT FLAP: Folds outward 180° around the left edge */
@@ -842,10 +1135,14 @@
       width: 50.2%;
       height: 100%;
       clip-path: polygon(0 0, 100% 50%, 0 100%);
-      background: linear-gradient(90deg, #3F4737 0%, #505B48 100%);
+      background: linear-gradient(90deg, #c0af90 0%, #cfbea0 100%);
       transform-origin: left center;
       z-index: 3;
       transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
+      
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.12),
+                  inset -1px 0 3px rgba(255, 255, 255, 0.25),
+                  inset 3px 0 5px rgba(0, 0, 0, 0.08);
     }
 
     /* 4. RIGHT FLAP: Folds outward 180° around the right edge */
@@ -856,35 +1153,72 @@
       width: 50.2%;
       height: 100%;
       clip-path: polygon(100% 0, 0 50%, 100% 100%);
-      background: linear-gradient(270deg, #3E4737 0%, #4C5644 100%);
+      background: linear-gradient(270deg, #bca98a 0%, #cbbaa0 100%);
       transform-origin: right center;
       z-index: 3;
       transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
+      
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.12),
+                  inset 1px 0 3px rgba(255, 255, 255, 0.25),
+                  inset -3px 0 5px rgba(0, 0, 0, 0.08);
     }
 
-    /* Centered Gold Wax Seal */
+    /* Centered Antique Gold Wax Seal with enhanced natural shadow */
     .env-seal-button {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 76px;
-      height: 76px;
+      width: 105px;
+      height: 105px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #E8C17F 0%, #BF9859 60%, #745724 100%);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45), inset 0 2px 3px rgba(255, 255, 255, 0.5), inset 0 -2px 5px rgba(0, 0, 0, 0.4);
+      z-index: 7;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 7;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      border: none;
+      background: transparent;
+      
+      /* Multi-level Drop Shadows for rich thickness */
+      box-shadow: 0 14px 32px rgba(96, 65, 27, 0.48), 
+                  0 4px 12px rgba(0, 0, 0, 0.3),
+                  inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+                  
+      transition: transform 0.35s cubic-bezier(0.35, 0, 0.25, 1), opacity 0.35s ease;
+      overflow: hidden;
+    }
+
+    .seal-graphic-img {
+      width: 120%;  /* Slightly zoomed-in to crop out any black edge */
+      height: 120%; /* Scaled together with width */
+      object-fit: cover;
+      transform: scale(1.1); /* Brings the gold details and ridges forward */
+      border-radius: 50%;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* Tactile gesture feedback */
+    .env-seal-button:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    /* Outward dissolution */
+    .envelope-wrapper.open .env-seal-button,
+    .envelope-wrapper.open .env-tap-cue {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.18);
+      pointer-events: none;
     }
 
     .seal-inner-ring {
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      border: 1px dashed rgba(255, 255, 255, 0.45);
+      border: 1px dashed rgba(177, 172, 157, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -894,8 +1228,8 @@
       font-family: 'Cinzel', serif;
       font-size: 1.25rem;
       font-weight: 700;
-      color: #422F11;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+      color: #443611;
+      text-shadow: 0 1px 1px rgba(60, 40, 15, 0.4);
       letter-spacing: 0.08em;
     }
 
@@ -904,11 +1238,11 @@
       top: calc(50% + 56px);
       left: 50%;
       transform: translateX(-50%);
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.28em;
-      color: #E2E6DF;
+      color: var(--text-dark);
       white-space: nowrap;
       z-index: 7;
       animation: pulseCue 2.2s infinite ease-in-out;
@@ -919,7 +1253,7 @@
       50% { opacity: 1; transform: translateX(-50%) translateY(3px); }
     }
 
-    /* THE OUTWARD FLAP UNFOLD (Direct Reveal) */
+    /* THE OUTWARD FLAP UNFOLD */
     .envelope-wrapper.open .env-flap-top {
       transform: rotateX(180deg);
     }
@@ -942,18 +1276,234 @@
       transform: translate(-50%, -50%) scale(1.15);
       pointer-events: none;
     }
-    
+
+    /* ==============================================
+       BORDERLESS EDITORIAL INVITATION HERO
+    ============================================== */
+    .formal-plaque-section {
+      padding: calc(3.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
+      background: transparent;
+      text-align: center;
+    }
+
+    .plaque-frame {
+      /* Drop all boxes, lines, borders, and card backgrounds */
+      border: none;
+      outline: none;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    /* Remove the corner diamond stars */
+    .plaque-frame::before,
+    .plaque-frame::after {
+      content: none;
+    }
+
+    .plaque-ornament {
+      font-size: 20px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 1.25rem;
+      opacity: 0.75;
+    }
+
+    .plaque-eyebrow {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .plaque-title-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(3rem, 11vw, 4rem);
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .plaque-ampersand {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 2.1rem;
+      color: var(--gold);
+      margin: 0.35rem 0;
+      display: block;
+      line-height: 1;
+    }
+
+    .plaque-rule {
+      width: 44px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.75rem auto;
+      opacity: 0.55;
+    }
+
+    .plaque-pleasure {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.12rem;
+      color: var(--text-dark);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .plaque-big-date {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+
+    .plaque-location-sub {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.8rem;
+    }
+
+    .plaque-family-target {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--text-dark);
+      margin: 0.35rem 0 0.85rem;
+    }
+
+    .plaque-individual-names {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.18rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ==============================================
+       WISHING WELL / REGISTRY SECTION
+    ============================================== */
+    .registry-section {
+      padding: 0.5rem 1.5rem 0; /* Reduced bottom padding to 0 */
+      background: var(--ivory);
+      text-align: center;
+    }
+
+    .registry-card {
+      background: #FAF7F2;
+      border: 1px solid rgba(180, 147, 88, 0.35);
+      border-radius: 6px;
+      padding: 2.2rem 1.5rem 1.8rem;
+      max-width: 380px;
+      margin: 0 auto;
+      box-shadow: 0 4px 18px rgba(96, 69, 29, 0.06);
+    }
+
+    .registry-eyebrow {
+      display: block;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .registry-title {
+      font-size: 2.8rem;
+      color: var(--text-dark);
+      margin-bottom: 0.75rem;
+      line-height: 1;
+    }
+
+    .registry-note {
+      font-size: 0.98rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1.6rem;
+    }
+
+    .bank-details-box {
+      border-top: 1px solid rgba(180, 147, 88, 0.3);
+      border-bottom: 1px solid rgba(180, 147, 88, 0.3);
+      padding: 1rem 0;
+      margin-bottom: 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.68rem;
+    }
+
+    .bank-label {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .bank-value {
+      color: var(--text-dark);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-copy-account {
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #574630;
+      color: #F8F4EC;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 4px;
+      border: 1px solid #574630;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-copy-account:hover {
+      background: #433523;
+    }
+
+    .btn-copy-account:active {
+      transform: scale(0.98);
+    }
+
   </style>
 </head>
 <body>
 
-    <body>
-
-  <!-- ============================================== 
-       FULL-SCREEN ENVELOPE OPENER (GOLD SEAL CENTERED)
-  ============================================== -->
   <!-- ==============================================
-       SEAMLESS 4-FLAP UNWRAP ENVELOPE OVERLAY
+       SEAMLESS 4-FLAP UNWRAP ENVELOPE OVERLAY (BEIGE)
   =============================================== -->
   <div id="envelope-overlay">
     <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelopeSequence()">
@@ -964,31 +1514,57 @@
       <div class="env-flap-bottom"></div>
       <div class="env-flap-top" id="envFlap"></div>
 
+      <!-- Personalized Dynamic Guest Plaque -->
+      <div class="env-guest-callout" id="envGuestBox">
+        <span class="guest-pretitle">A special invitation for</span>
+        <h2 class="guest-family-name" id="guestFamilyName"></h2>
+      </div>
+
       <!-- Centered Gold Seal -->
+      <!-- Real Wax Seal Image Button -->
       <div class="env-seal-button" id="envSeal">
-        <div class="seal-inner-ring">
-          <span class="seal-initials">K&amp;K</span>
-        </div>
+        <img src="seal.png" alt="Kyle & Kevona Wax Seal" class="seal-graphic-img" />
       </div>
     </div>
   </div>
 
   <!-- ==============================================
-       1. ENVELOPE TOP FOLD BANNER (RESTORED TITLE)
+       BORDERLESS EDITORIAL INVITATION HERO
   =============================================== -->
-  <header class="env-header">
-    <div class="reveal">
-      <h1 class="script-title env-names">Kyle</h1>
-      <span class="script-title env-ampersand">&amp;</span>
-      <h1 class="script-title env-names">Kevona</h1>
-      <p class="env-date">12 . 02 . 2027</p>
+  <section class="formal-plaque-section reveal">
+    <div class="plaque-frame">
+      <p class="plaque-eyebrow">Together with their families</p>
+      
+      <h1 class="plaque-title-name">Kyle</h1>
+      <span class="plaque-ampersand">&amp;</span>
+      <h1 class="plaque-title-name">Kevona</h1>
+      
+      <div class="plaque-rule"></div>
+
+      <p class="plaque-pleasure">
+        Request the pleasure of your company<br>as they celebrate their marriage
+      </p>
+
+      <p class="plaque-big-date">27 . 02 . 2027</p>
+      <p class="plaque-location-sub">Saturday • The Unalome Venue • KwaZulu-Natal</p>
+
+      <div class="plaque-rule"></div>
+
+      <p class="plaque-eyebrow">Especially Invited</p>
+      <h2 class="plaque-family-target" id="plaqueFamilyTitle">The Govender Family</h2>
+      
+      <div class="plaque-individual-names" id="plaqueMemberList">
+        <span>Ricky Govender</span>
+        <span>Mandy Govender</span>
+        <span>Nigel Govender</span>
+      </div>
     </div>
-  </header>
+  </section>
 
   <!-- ==============================================
-       2. EDITORIAL OPENING PHOTO
+       2. EDITORIAL OPENING PHOTO (opening.jpg)
   =============================================== -->
-  <section class="photo-section">
+  <!-- <section class="photo-section">
     <div class="photo-frame reveal">
       <img src="opening.jpg" alt="Kyle &amp; Kevona Celebration" style="object-position: center;" />
     </div>
@@ -998,10 +1574,10 @@
         "Two lives, two hearts, joined together in friendship, united forever in love."
       </p>
     </div>
-  </section>
+  </section> -->
 
   <!-- ==============================================
-       4. OLIVE PANEL: BLESSING, COUNTDOWN & CALENDAR
+       4. SAND PANEL: BLESSING, COUNTDOWN & CALENDAR
   =============================================== -->
   <section class="olive-panel">
     <div class="reveal">
@@ -1010,24 +1586,24 @@
       </p>
 
       <div class="date-badge-box">
-        <span class="sans-caps" style="color: #E2E6DF;">Friday</span>
-        <span class="day-num">12</span>
-        <span class="sans-caps" style="color: #E2E6DF;">February 2027</span>
+        <span class="sans-caps" style="color: var(--text-dark);">Saturday</span>
+        <span class="day-num">27</span>
+        <span class="sans-caps" style="color: var(--text-dark);">February 2027</span>
       </div>
 
       <p class="countdown-title">The Countdown</p>
       <div class="countdown-grid">
         <div class="countdown-col"><span id="cd-days">--</span><span class="countdown-sub">Days</span></div>
-        <span style="opacity: 0.6;">:</span>
+        <span style="opacity: 0.6; color: var(--gold);">:</span>
         <div class="countdown-col"><span id="cd-hours">--</span><span class="countdown-sub">Hours</span></div>
-        <span style="opacity: 0.6;">:</span>
+        <span style="opacity: 0.6; color: var(--gold);">:</span>
         <div class="countdown-col"><span id="cd-mins">--</span><span class="countdown-sub">Mins</span></div>
-        <span style="opacity: 0.6;">:</span>
+        <span style="opacity: 0.6; color: var(--gold);">:</span>
         <div class="countdown-col"><span id="cd-secs">--</span><span class="countdown-sub">Secs</span></div>
       </div>
 
-      <div class="calendar-wrap">
-        <span class="sans-caps" style="letter-spacing: 0.3em; font-size: 0.7rem; color: #E2E6DF;">The Big Day • February 2027</span>
+      <!-- <div class="calendar-wrap">
+        <span class="sans-caps" style="letter-spacing: 0.3em; font-size: 0.7rem; color: var(--text-muted);">The Big Day • February 2027</span>
         <table class="calendar-table">
           <thead>
             <tr><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th><th>SUN</th></tr>
@@ -1039,7 +1615,7 @@
             <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
           </tbody>
         </table>
-      </div>
+      </div> -->
     </div>
   </section>
 
@@ -1048,10 +1624,10 @@
   =============================================== -->
   <section class="location-section">
     <!-- Holy Ceremony (holy_matrimony.png) -->
-    <div class="event-block reveal">
-      <img src="holy_matrimony.png" alt="Holy Ceremony" class="art-img church-art" />
+    <div class="event-block reveal" id="ceremony-event-card">
+      <img src="the_reception.png" alt="The Reception" class="art-img reception-art" />
       <h3 class="script-title event-heading">Holy Matrimony</h3>
-      <p class="event-time">3:30 PM</p>
+      <p class="event-time">2:30 PM</p>
       <p class="event-venue">The Unalome Venue</p>
       <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
       <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
@@ -1061,11 +1637,15 @@
 
     <!-- The Reception (the_reception.png) -->
     <div class="event-block reveal">
-      <img src="the_reception.png" alt="The Reception" class="art-img reception-art" />
-      <h3 class="script-title event-heading">The Reception</h3>
-      <p class="event-time">5:30 PM</p>
-      <p class="event-venue">The Grand Pavilion</p>
+      <img src="holy_matrimony.png" alt="Holy Ceremony" class="art-img church-art" />
+      <h3 class="script-title event-heading">Reception</h3>
       <p class="event-subvenue">Dinner, Toasts &amp; Celebration</p>
+      <p class="event-time">5:30 PM</p>
+      <p class="event-venue">The Unalome Venue</p>
+      <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
+      <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
+        View Location
+      </a>
     </div>
   </section>
 
@@ -1078,8 +1658,9 @@
       
       <div class="serpentine-container">
         
+
         <!-- 1. Ceremony (holy_matrimony.png) -->
-        <div class="serpentine-row reveal">
+        <div class="serpentine-row reveal" id="timeline-ceremony-node">
           <div class="serpentine-node">
             <img src="holy_matrimony.png" alt="Ceremony" />
           </div>
@@ -1138,14 +1719,14 @@
   </section>
 
   <!-- Photo Break Card -->
-  <section class="photo-section" style="padding-top: 0;">
+  <!-- <section class="photo-section" style="padding-top: 0;">
     <div class="photo-frame reveal" style="height: 320px;">
       <img src="holding.jpg" alt="The Unalome Venue Grounds" style="object-position: center bottom;" />
     </div>
-  </section>
+  </section> -->
 
   <!-- ==============================================
-       7. DRESS CODE (dress_code.png)
+       7. DRESS CODE (WITH COLOR PALETTE SWATCHES)
   =============================================== -->
   <section class="dress-code-section reveal">
     <h3 class="script-title dress-heading">Dress Code</h3>
@@ -1155,25 +1736,103 @@
       <img src="dress_code.png" alt="Formal Dress Code" class="dress-code-img" />
     </div>
 
+    <!-- Curated Guest Color Palette -->
+    <div class="swatch-container">
+      <span class="swatch-eyebrow">Guest Color Palette</span>
+      <div class="swatch-grid">
+        <div class="swatch-item">
+          <span class="swatch-circle" style="background-color: #000000;"></span>
+          <span class="swatch-name">Black</span>
+        </div>
+        <div class="swatch-item">
+          <span class="swatch-circle" style="background-color: #32572d;"></span>
+          <span class="swatch-name">Hunter Green</span>
+        </div>
+        <div class="swatch-item">
+          <span class="swatch-circle" style="background-color: #708847;"></span>
+          <span class="swatch-name">Palm Leaf</span>
+        </div>
+        <div class="swatch-item">
+          <span class="swatch-circle" style="background-color: #5c4535;"></span>
+          <span class="swatch-name">Ash Brown</span>
+        </div>
+        <div class="swatch-item">
+          <span class="swatch-circle" style="background-color: #c29672;"></span>
+          <span class="swatch-name">Camel</span>
+        </div>
+        <div class="swatch-item">
+          <span class="swatch-circle" style="background-color: #f5dcb3;"></span>
+          <span class="swatch-name">Wheat</span>
+        </div>
+      </div>
+    </div>
+
     <p class="dress-note">
-      We kindly request our guests dress in formal wedding attire. We reserve white and ivory tones for the bride.
+      We kindly invite our guests to draw inspiration from our wedding palette. We respectfully reserve white and ivory tones for the bride.
     </p>
   </section>
 
   <!-- ==============================================
-       9. CONFIRMATION (RSVP CALLOUT)
+       9. INDIVIDUAL FAMILY MEMBER RSVP SECTION
   =============================================== -->
-  <section class="rsvp-panel reveal">
-    <img src="envelope.png" alt="RSVP Envelope" class="rsvp-envelope-art" />
-    <h3 class="script-title rsvp-title">Confirmation</h3>
-    <p class="rsvp-deadline">Kindly confirm your attendance before December 15, 2026</p>
-    
-    <button class="btn-confirm" onclick="openRSVPModal()">
-      Confirm Attendance
+  <section class="rsvp-section reveal" id="rsvp-section">
+    <span class="rsvp-eyebrow">The Honour Of Your Presence</span>
+    <h3 class="rsvp-title">Kindly RSVP</h3>
+    <p class="rsvp-subnote">Please select a response for each invited family member.</p>
+
+    <!-- Individual Guest Cards -->
+    <div class="guest-rsvp-list" id="guestCardsContainer">
+      <!-- Populated dynamically via JS -->
+    </div>
+
+
+
+    <!-- Submit Action -->
+    <button class="btn-rsvp-submit" id="submitRsvpBtn" onclick="sendFamilyRSVP()">
+      Submit Family RSVP
     </button>
+    <p class="rsvp-status-msg" id="rsvpStatusMsg"></p>
   </section>
 
+
+
   <!-- ==============================================
+       REGISTRY / WISHING WELL (BANKING DETAILS)
+  =============================================== -->
+  <section class="registry-section reveal">
+    
+      <span class="registry-eyebrow">A Note On Gifts</span>
+      <h3 class="script-title registry-title">Wishing Well</h3>
+      <p class="registry-note">
+        Your presence and prayers on our special day are the greatest gifts of all. Should you wish to honour us with a gift, a monetary contribution toward our new beginning would be warmly appreciated.
+      </p>
+
+      <div class="bank-details-box">
+        <div class="bank-row">
+          <span class="bank-label">Account Holder</span>
+          <span class="bank-value">Kevona Naidoo</span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Bank</span>
+          <span class="bank-value">Nedbank</span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Account Type</span>
+          <span class="bank-value">Cheque Account</span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Account Number</span>
+          <span class="bank-value" id="accountNumberText">1219160563</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-copy-account" id="copyAccBtn" onclick="copyAccountNumber()">
+        Copy Account Number
+      </button>
+
+  </section>
+
+    <!-- ==============================================
        10. RECEPTION ETIQUETTE & CLOSING
   =============================================== -->
   <section class="etiquette-section reveal">
@@ -1183,20 +1842,13 @@
     </div>
   </section>
 
-  <!-- Final Venue Closing Photo (unalome.jpg) -->
-  <section class="photo-section" style="padding-top: 0; padding-bottom: 3.5rem;">
-    <div class="photo-frame reveal" style="height: 340px;">
-      <img src="unalome.jpg" alt="The Unalome Venue Lake Pavilion" style="object-position: center 65%;" />
-    </div>
-  </section>
-
   <!-- ==============================================
        11. INTERACTIVE RSVP MODAL
   =============================================== -->
   <div class="modal-overlay" id="rsvpModal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeRSVPModal()">&times;</button>
-      <h3 class="script-title" style="font-size: 2.2rem; color: var(--sage-dark);">RSVP</h3>
+      <h3 class="script-title" style="font-size: 2.2rem; color: var(--gold-dark);">RSVP</h3>
       <p style="font-size: 0.95rem; font-style: italic; color: var(--text-muted); margin-bottom: 1.25rem;">
         Kyle &amp; Kevona's Wedding
       </p>
@@ -1211,7 +1863,7 @@
         <input type="tel" class="modal-input" placeholder="WhatsApp Contact Number" required />
         <input type="text" class="modal-input" placeholder="Dietary restrictions (if any)" />
         
-        <button type="submit" class="btn-confirm" style="width: 100%; margin-top: 0.5rem; background: var(--sage-olive); color: #fff;">
+        <button type="submit" class="btn-confirm" style="width: 100%; margin-top: 0.5rem;">
           Submit Response
         </button>
       </form>
@@ -1239,7 +1891,7 @@
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     /* 2. Real-Time Countdown to February 12, 2027 */
-    const targetDate = new Date("February 12, 2027 15:30:00").getTime();
+    const targetDate = new Date("February 27, 2027 15:30:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -1292,6 +1944,7 @@
       closeRSVPModal();
     }
 
+    /* 5. Seamless Outward 4-Flap Envelope Unwrap */
     function openEnvelopeSequence() {
       const envelope = document.getElementById('envelopeWrapper');
       const overlay = document.getElementById('envelope-overlay');
@@ -1307,6 +1960,270 @@
         overlay.style.display = 'none';
       }, 1800);
     }
+
+    /* ==========================================================
+       LIVE GOOGLE SHEET INTEGRATION (KYLE & KEVONA WEDDING)
+    ========================================================== */
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
+    
+    // Paste your Google Apps Script Web App URL from Step 2 here:
+    const GOOGLE_SCRIPT_WEBHOOK_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+
+    let currentFamilyTitle = "Our Dearest Family & Friends";
+    let currentSurname = "";
+    let currentMemberList = ["Honoured Guest"];
+    let hasCeremonyInvite = true;
+    let currentRowId = null;
+    const rsvpResponses = {};
+
+    function parseCSVLine(line) {
+      const values = [];
+      let insideQuote = false;
+      let entry = "";
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"' || char === "'") {
+          insideQuote = !insideQuote;
+        } else if (char === ',' && !insideQuote) {
+          values.push(entry.trim());
+          entry = "";
+        } else {
+          entry += char;
+        }
+      }
+      values.push(entry.trim());
+      return values;
+    }
+
+    async function loadGuestDataFromSheet() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const rowIdParam = urlParams.get("id");
+      const searchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").toLowerCase().trim();
+
+      if (rowIdParam || searchSurname) {
+        try {
+          const res = await fetch(SHEET_CSV_URL);
+          const csvText = await res.text();
+          const lines = csvText.trim().split(/\r?\n/);
+
+          // Find row with headers "Name", "Surname", "Family Members"
+          let headerIndex = lines.findIndex(l => {
+            const lower = l.toLowerCase();
+            return lower.includes("surname") && lower.includes("family members");
+          });
+          if (headerIndex === -1) headerIndex = 2; // Row 3 in sheet is index 2
+
+          const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
+
+          // 1. Direct row match if ?id= is passed
+          let matchedRow = null;
+          if (rowIdParam && !isNaN(rowIdParam)) {
+            const targetIndex = parseInt(rowIdParam, 10) - 1; // Convert 1-based row to 0-based index
+            if (lines[targetIndex]) {
+              const vals = parseCSVLine(lines[targetIndex]);
+              matchedRow = {};
+              rawHeaders.forEach((h, idx) => matchedRow[h] = vals[idx] || "");
+              currentRowId = rowIdParam;
+            }
+          }
+
+          // 2. Fallback match by surname
+          if (!matchedRow && searchSurname) {
+            for (let i = headerIndex + 1; i < lines.length; i++) {
+              const vals = parseCSVLine(lines[i]);
+              const row = {};
+              rawHeaders.forEach((h, idx) => row[h] = vals[idx] || "");
+
+              const rowSurname = (row["surname"] || "").toLowerCase().trim();
+              const rowName = (row["name"] || "").toLowerCase().trim();
+
+              if (rowSurname === searchSurname || rowName === searchSurname) {
+                matchedRow = row;
+                currentRowId = i + 1;
+                break;
+              }
+            }
+          }
+
+          if (matchedRow) {
+            const surnameVal = matchedRow["surname"] ? matchedRow["surname"].trim() : "";
+            const primaryName = matchedRow["name"] ? matchedRow["name"].trim() : "";
+            const rawMembers = matchedRow["family members"] || "";
+            const ceremonyVal = (matchedRow["ceremony"] || "").toLowerCase().trim();
+
+            currentSurname = surnameVal;
+
+            // Envelope & Plaque Title: "______ Family Invitation"
+            if (surnameVal) {
+              currentFamilyTitle = `${surnameVal} Family Invitation`;
+            } else if (primaryName) {
+              currentFamilyTitle = `${primaryName} Family Invitation`;
+            }
+
+            // Combine Primary Guest + Family Members
+            const members = [];
+            if (primaryName) members.push(primaryName);
+            if (rawMembers) {
+              rawMembers.split(/[,&]/).forEach(m => {
+                const clean = m.trim();
+                if (clean && !members.some(e => e.toLowerCase() === clean.toLowerCase())) {
+                  members.push(clean);
+                }
+              });
+            }
+            if (members.length > 0) currentMemberList = members;
+
+            // Only 'yes' shows Holy Matrimony
+            hasCeremonyInvite = (ceremonyVal === "yes");
+          }
+        } catch (err) {
+          console.warn("Could not load Google Sheet data. Falling back to defaults.", err);
+        }
+      }
+
+      updateEnvelopeAndPlaque();
+      updateCeremonyVisibility();
+      renderFamilyRSVP();
+    }
+
+    function updateEnvelopeAndPlaque() {
+      const envTarget = document.getElementById("guestFamilyName");
+      const plaqueTitle = document.getElementById("plaqueFamilyTitle");
+      const plaqueMembers = document.getElementById("plaqueMemberList");
+
+      if (envTarget) envTarget.textContent = currentFamilyTitle;
+      if (plaqueTitle) plaqueTitle.textContent = currentFamilyTitle;
+      if (plaqueMembers) {
+        plaqueMembers.innerHTML = currentMemberList.map(name => `<span>${name}</span>`).join("");
+      }
+    }
+
+    function updateCeremonyVisibility() {
+      const ceremonyCard = document.getElementById("ceremony-event-card");
+      const ceremonyTimeline = document.getElementById("timeline-ceremony-node");
+
+      if (!hasCeremonyInvite) {
+        if (ceremonyCard) ceremonyCard.style.display = "none";
+        if (ceremonyTimeline) ceremonyTimeline.style.display = "none";
+      } else {
+        if (ceremonyCard) ceremonyCard.style.display = "";
+        if (ceremonyTimeline) ceremonyTimeline.style.display = "";
+      }
+    }
+
+    function renderFamilyRSVP() {
+      const container = document.getElementById("guestCardsContainer");
+      if (!container) return;
+
+      container.innerHTML = currentMemberList.map((name, index) => `
+        <div class="guest-rsvp-card">
+          <span class="guest-name-label">${name}</span>
+          <div class="rsvp-button-pair">
+            <button type="button" 
+              class="choice-btn accept" 
+              id="btn-accept-${index}" 
+              onclick="setGuestResponse('${name.replace(/'/g, "\\'")}', 'Attending', ${index})">
+              Joyfully Accept
+            </button>
+            <button type="button" 
+              class="choice-btn decline" 
+              id="btn-decline-${index}" 
+              onclick="setGuestResponse('${name.replace(/'/g, "\\'")}', 'Declined', ${index})">
+              Regretfully Decline
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function setGuestResponse(name, status, index) {
+      rsvpResponses[name] = status;
+
+      const acceptBtn = document.getElementById(`btn-accept-${index}`);
+      const declineBtn = document.getElementById(`btn-decline-${index}`);
+
+      if (status === 'Attending') {
+        acceptBtn.classList.add('active');
+        declineBtn.classList.remove('active');
+      } else {
+        declineBtn.classList.add('active');
+        acceptBtn.classList.remove('active');
+      }
+
+      const answeredCount = Object.keys(rsvpResponses).length;
+      document.getElementById('rsvpStatusMsg').textContent = `${answeredCount} of ${currentMemberList.length} responses selected.`;
+    }
+
+    async function sendFamilyRSVP() {
+      if (Object.keys(rsvpResponses).length < currentMemberList.length) {
+        alert("Please select Joyfully Accept or Regretfully Decline for each invited family member.");
+        return;
+      }
+
+      const submitBtn = document.getElementById("submitRsvpBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Recording RSVP...";
+
+      // Filter only members who joyfully accepted
+      const attendingMembers = Object.keys(rsvpResponses).filter(
+        name => rsvpResponses[name] === "Attending"
+      );
+
+      // Post attending list directly to Google Sheet column G
+      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
+        try {
+          await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              rowId: currentRowId,
+              surname: currentSurname || currentFamilyTitle,
+              attendingMembers: attendingMembers.length > 0 ? attendingMembers : ["None (All Declined)"]
+            })
+          });
+        } catch (err) {
+          console.warn("Could not post to sheet webhook:", err);
+        }
+      }
+
+      // Format clean message for WhatsApp
+      let summaryText = `*Wedding RSVP - ${currentFamilyTitle}*\n\n`;
+      for (const [name, status] of Object.entries(rsvpResponses)) {
+        summaryText += `• ${name}: ${status === 'Attending' ? '✅ Joyfully Accepts' : '❌ Regretfully Declines'}\n`;
+      }
+
+      // Organizer WhatsApp number (country code 27 for South Africa)
+      const organizerWhatsApp = "27821234567";
+      const whatsappURL = `https://wa.me/${organizerWhatsApp}?text=${encodeURIComponent(summaryText)}`;
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Family RSVP";
+      document.getElementById('rsvpStatusMsg').textContent = "RSVP recorded! Opening WhatsApp...";
+
+      window.open(whatsappURL, '_blank');
+    }
+
+    function copyAccountNumber() {
+      const accNum = "1219160563";
+      navigator.clipboard.writeText(accNum).then(() => {
+        const btn = document.getElementById("copyAccBtn");
+        btn.textContent = "Account Number Copied!";
+        btn.style.background = "#96713B";
+        btn.style.borderColor = "#96713B";
+        setTimeout(() => {
+          btn.textContent = "Copy Account Number";
+          btn.style.background = "#574630";
+          btn.style.borderColor = "#574630";
+        }, 2500);
+      }).catch(err => {
+        console.warn("Could not copy account number automatically:", err);
+      });
+    }
+
+    // Initialize immediately on load
+    window.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
+
   </script>
 </body>
 </html>
