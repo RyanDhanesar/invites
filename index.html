@@ -1568,7 +1568,7 @@
        OPTIMIZED INSTANT GOOGLE SHEET PRE-LOADER
     ========================================================== */
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
-    const GOOGLE_SCRIPT_WEBHOOK_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+    const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxgsT_PHBgC4SOHTWJyTKF8Y7jpB4C2KGIP_CzWpnNkPk5mWTOaDFFTU7sNVrOO4UC5/exec";
 
     // 1. Kick off fetch immediately in JavaScript execution (zero wait)
     const earlySheetFetchPromise = fetch(SHEET_CSV_URL).catch(err => {
@@ -1776,24 +1776,30 @@
     }
 
     async function sendFamilyRSVP() {
+      // 1. Ensure every invited family member has made a selection
       if (Object.keys(rsvpResponses).length < currentMemberList.length) {
-        alert("Please make a selection (Accept or Decline) for all invited family members before submitting.");
+        alert("Please make a selection (Accepts or Declines) for all invited family members before submitting.");
         return;
       }
 
       const submitBtn = document.getElementById("submitRsvpBtn");
+      const statusMsg = document.getElementById('rsvpStatusMsg');
+      
       submitBtn.disabled = true;
       submitBtn.textContent = "Recording RSVP...";
+      statusMsg.textContent = "Submitting your response to Kyle & Kevona...";
 
+      // 2. Separate accepted guests from declined guests
       const attendingMembers = Object.keys(rsvpResponses).filter(
         name => rsvpResponses[name] === "Attending"
       );
 
+      // 3. Post directly to Google Apps Script Webhook
       if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
         try {
           await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
             method: "POST",
-            mode: "no-cors",
+            mode: "no-cors", // Required for Google Apps Script Webhooks
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               rowId: currentRowId,
@@ -1801,24 +1807,25 @@
               attendingMembers: attendingMembers.length > 0 ? attendingMembers : ["None (All Declined)"]
             })
           });
+
+          // Elegant on-screen confirmation
+          submitBtn.textContent = "RSVP Confirmed";
+          submitBtn.style.background = "#96713B";
+          submitBtn.style.borderColor = "#96713B";
+          statusMsg.textContent = "Thank you! Your RSVP has been recorded successfully.";
         } catch (err) {
           console.warn("Could not post to sheet webhook:", err);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Family RSVP";
+          statusMsg.textContent = "Unable to reach the guest list. Please check your connection and try again.";
         }
+      } else {
+        // Fallback warning if Webhook URL hasn't been set yet
+        console.warn("Google Apps Script Webhook URL is not set yet.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Family RSVP";
+        statusMsg.textContent = "Google Sheet Webhook URL not configured in script.";
       }
-
-      let summaryText = `*Wedding RSVP - ${currentFamilyTitle}*\n\n`;
-      for (const [name, status] of Object.entries(rsvpResponses)) {
-        summaryText += `• ${name}: ${status === 'Attending' ? '✅ Joyfully Accepts' : '❌ Regretfully Declines'}\n`;
-      }
-
-      const organizerWhatsApp = "27821234567";
-      const whatsappURL = `https://wa.me/${organizerWhatsApp}?text=${encodeURIComponent(summaryText)}`;
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Family RSVP";
-      document.getElementById('rsvpStatusMsg').textContent = "RSVP recorded! Opening WhatsApp...";
-
-      window.open(whatsappURL, '_blank');
     }
 
     function copyAccountNumber() {
