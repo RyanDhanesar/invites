@@ -1565,30 +1565,24 @@
     }
 
     /* ==========================================================
-       OPTIMIZED INSTANT GOOGLE SHEET PRE-LOADER
+       BULLETPROOF GOOGLE SHEET DATA LOADER & RSVP WRITEBACK
     ========================================================== */
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
-    const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxgsT_PHBgC4SOHTWJyTKF8Y7jpB4C2KGIP_CzWpnNkPk5mWTOaDFFTU7sNVrOO4UC5/exec";
+    
+    // Ensure this is your deployed Apps Script Web App URL:
+    const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby9aKXY3gxAnVbwbFmXHQwOY2Hvs_fnLstSSZL_cwcIk4ojL9_X9wRfL3UKAHh8hYcn/exec";
 
-    // 1. Kick off fetch immediately in JavaScript execution (zero wait)
-    const earlySheetFetchPromise = fetch(SHEET_CSV_URL).catch(err => {
-      console.warn("Pre-fetch failed, will fallback.", err);
-      return null;
-    });
-
-    // 2. Read URL parameters immediately
     const urlParams = new URLSearchParams(window.location.search);
     const rowIdParam = urlParams.get("id");
     const rawSearchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").trim();
 
-    // 3. Instant Pre-population: derive family title from URL query right away
     let currentSurname = rawSearchSurname;
     let currentFamilyTitle = rawSearchSurname 
       ? `${rawSearchSurname.charAt(0).toUpperCase() + rawSearchSurname.slice(1)} Family Invitation`
       : "Our Dearest Family & Friends";
     let currentMemberList = ["Honoured Guest"];
     let hasCeremonyInvite = true;
-    let currentRowId = rowIdParam || null;
+    let currentRowId = rowIdParam || null; // Always initialize directly from URL
     const rsvpResponses = {};
 
     function parseCSVLine(line) {
@@ -1611,94 +1605,96 @@
     }
 
     async function loadGuestDataFromSheet() {
-      // Paint instantaneous title first (e.g. Cele Family Invitation)
       updateEnvelopeAndPlaque();
       renderFamilyRSVP();
 
-      const searchSurname = rawSearchSurname.toLowerCase();
+      if (!rowIdParam && !rawSearchSurname) return;
 
-      if (rowIdParam || searchSurname) {
-        try {
-          const res = await earlySheetFetchPromise;
-          if (!res) return;
+      try {
+        // Direct, single fetch with cache bypass so live edits in the sheet reflect immediately
+        const res = await fetch(SHEET_CSV_URL + "&_t=" + Date.now());
+        const csvText = await res.text();
+        const lines = csvText.trim().split(/\r?\n/);
 
-          const csvText = await res.text();
-          const lines = csvText.trim().split(/\r?\n/);
+        let headerIndex = lines.findIndex(l => {
+          const lower = l.toLowerCase();
+          return lower.includes("surname") && lower.includes("family members");
+        });
+        if (headerIndex === -1) headerIndex = 2; // Row 3 is index 2
 
-          let headerIndex = lines.findIndex(l => {
-            const lower = l.toLowerCase();
-            return lower.includes("surname") && lower.includes("family members");
-          });
-          if (headerIndex === -1) headerIndex = 2;
+        const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
 
-          const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
+        let matchedRow = null;
 
-          let matchedRow = null;
-          if (rowIdParam && !isNaN(rowIdParam)) {
-            const targetIndex = parseInt(rowIdParam, 10) - 1;
-            if (lines[targetIndex]) {
-              const vals = parseCSVLine(lines[targetIndex]);
-              matchedRow = {};
-              rawHeaders.forEach((h, idx) => matchedRow[h] = vals[idx] || "");
-              currentRowId = rowIdParam;
-            }
+        // 1. Match by Row ID (?id=4 -> line index 3)
+        if (rowIdParam && !isNaN(rowIdParam)) {
+          const targetIndex = parseInt(rowIdParam, 10) - 1;
+          if (lines[targetIndex]) {
+            const vals = parseCSVLine(lines[targetIndex]);
+            matchedRow = {};
+            rawHeaders.forEach((h, idx) => matchedRow[h] = vals[idx] || "");
+            currentRowId = rowIdParam;
           }
-
-          if (!matchedRow && searchSurname) {
-            for (let i = headerIndex + 1; i < lines.length; i++) {
-              const vals = parseCSVLine(lines[i]);
-              const row = {};
-              rawHeaders.forEach((h, idx) => row[h] = vals[idx] || "");
-
-              const rowSurname = (row["surname"] || "").toLowerCase().trim();
-              const rowName = (row["name"] || "").toLowerCase().trim();
-
-              if (rowSurname === searchSurname || rowName === searchSurname) {
-                matchedRow = row;
-                currentRowId = i + 1;
-                break;
-              }
-            }
-          }
-
-          if (matchedRow) {
-            const surnameVal = matchedRow["surname"] ? matchedRow["surname"].trim() : "";
-            const primaryName = matchedRow["name"] ? matchedRow["name"].trim() : "";
-            const rawMembers = matchedRow["family members"] || "";
-            const ceremonyVal = (matchedRow["ceremony"] || "").toLowerCase().trim();
-
-            currentSurname = surnameVal;
-
-            if (surnameVal) {
-              currentFamilyTitle = `${surnameVal} Family Invitation`;
-            } else if (primaryName) {
-              currentFamilyTitle = `${primaryName} Family Invitation`;
-            }
-
-            const members = [];
-            if (primaryName) members.push(primaryName);
-            if (rawMembers) {
-              rawMembers.split(/[,&]/).forEach(m => {
-                const clean = m.trim();
-                if (clean && !members.some(e => e.toLowerCase() === clean.toLowerCase())) {
-                  members.push(clean);
-                }
-              });
-            }
-            if (members.length > 0) currentMemberList = members;
-
-            hasCeremonyInvite = (ceremonyVal === "yes");
-          }
-        } catch (err) {
-          console.warn("Could not load Google Sheet data. Falling back to defaults.", err);
         }
+
+        // 2. Match by Surname if ID didn't catch
+        const searchLower = rawSearchSurname.toLowerCase();
+        if (!matchedRow && searchLower) {
+          for (let i = headerIndex + 1; i < lines.length; i++) {
+            const vals = parseCSVLine(lines[i]);
+            const row = {};
+            rawHeaders.forEach((h, idx) => row[h] = vals[idx] || "");
+
+            const rowSurname = (row["surname"] || "").toLowerCase().trim();
+            const rowName = (row["name"] || "").toLowerCase().trim();
+
+            if (rowSurname === searchLower || rowName === searchLower) {
+              matchedRow = row;
+              currentRowId = i + 1; // Actual Google Sheet row number
+              break;
+            }
+          }
+        }
+
+        if (matchedRow) {
+          const surnameVal = matchedRow["surname"] ? matchedRow["surname"].trim() : "";
+          const primaryName = matchedRow["name"] ? matchedRow["name"].trim() : "";
+          const rawMembers = matchedRow["family members"] || "";
+          const ceremonyVal = (matchedRow["ceremony"] || "").toLowerCase().trim();
+
+          currentSurname = surnameVal;
+
+          if (surnameVal) {
+            currentFamilyTitle = `${surnameVal} Family Invitation`;
+          } else if (primaryName) {
+            currentFamilyTitle = `${primaryName} Family Invitation`;
+          }
+
+          const members = [];
+          if (primaryName) members.push(primaryName);
+          if (rawMembers) {
+            rawMembers.split(/[,&]/).forEach(m => {
+              const clean = m.trim();
+              if (clean && !members.some(e => e.toLowerCase() === clean.toLowerCase())) {
+                members.push(clean);
+              }
+            });
+          }
+          if (members.length > 0) currentMemberList = members;
+
+          hasCeremonyInvite = (ceremonyVal === "yes");
+        }
+      } catch (err) {
+        console.warn("Could not load Google Sheet data. Falling back to URL defaults.", err);
       }
 
-      // Re-render once data has resolved
       updateEnvelopeAndPlaque();
       updateCeremonyVisibility();
       renderFamilyRSVP();
     }
+
+    // Call once when DOM is ready
+    window.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
 
     // Run as fast as HTML elements are available
     if (document.readyState === 'loading') {
@@ -1795,7 +1791,7 @@
       );
 
       // 3. Post directly to Google Apps Script Webhook
-      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
+      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycby9aKXY3gxAnVbwbFmXHQwOY2Hvs_fnLstSSZL_cwcIk4ojL9_X9wRfL3UKAHh8hYcn/exec") {
         try {
           await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
             method: "POST",
