@@ -7,6 +7,10 @@
   <title>Kyle &amp; Kevona — Wedding Celebration</title>
   
   <!-- Curated Luxury Editorial Fonts -->
+   <!-- Pre-connect and warm up Google Sheets CSV pipeline -->
+  <link rel="preconnect" href="https://docs.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://docs.google.com">
+  <link rel="preload" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv" as="fetch" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
@@ -167,7 +171,7 @@
       transform-origin: top center;
       z-index: 5;
       /* Balanced, weighted paper easing: opens first */
-      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1);
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1);
       box-shadow: 0 10px 24px rgba(60, 42, 18, 0.22);
     }
 
@@ -181,7 +185,7 @@
       clip-path: polygon(0 100%, 50% 0, 100% 100%);
       transform-origin: bottom center;
       z-index: 4;
-      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1) 120ms;
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1) 120ms;
       box-shadow: 0 -8px 20px rgba(60, 42, 18, 0.16);
     }
 
@@ -195,7 +199,7 @@
       clip-path: polygon(0 0, 100% 50%, 0 100%);
       transform-origin: left center;
       z-index: 3;
-      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
       box-shadow: 5px 0 16px rgba(60, 42, 18, 0.12);
     }
 
@@ -209,7 +213,7 @@
       clip-path: polygon(100% 0, 0 50%, 100% 100%);
       transform-origin: right center;
       z-index: 3;
-      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
       box-shadow: -5px 0 16px rgba(60, 42, 18, 0.12);
     }
 
@@ -230,7 +234,7 @@
       border: none;
       background: transparent;
       box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
+      transition: transform 1200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
       will-change: transform, opacity;
       overflow: hidden;
     }
@@ -246,7 +250,7 @@
       text-align: center;
       z-index: 6;
       pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transition: opacity 0.5s ease, transform 0.4s ease;
     }
 
     .guest-pretitle {
@@ -272,28 +276,6 @@
       text-shadow: 
         0 1px 2px rgba(255, 255, 255, 0.95),
         0 0 1px rgba(255, 255, 255, 0.8);
-    }
-
-    /* Wax Seal Button */
-    .env-seal-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 105px;
-      height: 105px;
-      border-radius: 50%;
-      z-index: 7;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: transparent;
-      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
-      transition: transform 0.4s ease, opacity 0.4s ease;
-      will-change: transform, opacity;
-      overflow: hidden;
     }
 
     .seal-graphic-img {
@@ -1583,18 +1565,30 @@
     }
 
     /* ==========================================================
-       LIVE GOOGLE SHEET INTEGRATION (KYLE & KEVONA WEDDING)
+       OPTIMIZED INSTANT GOOGLE SHEET PRE-LOADER
     ========================================================== */
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
-    
-    // Paste your Google Apps Script Web App URL from Step 2 here:
     const GOOGLE_SCRIPT_WEBHOOK_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
 
-    let currentFamilyTitle = "Our Dearest Family & Friends";
-    let currentSurname = "";
+    // 1. Kick off fetch immediately in JavaScript execution (zero wait)
+    const earlySheetFetchPromise = fetch(SHEET_CSV_URL).catch(err => {
+      console.warn("Pre-fetch failed, will fallback.", err);
+      return null;
+    });
+
+    // 2. Read URL parameters immediately
+    const urlParams = new URLSearchParams(window.location.search);
+    const rowIdParam = urlParams.get("id");
+    const rawSearchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").trim();
+
+    // 3. Instant Pre-population: derive family title from URL query right away
+    let currentSurname = rawSearchSurname;
+    let currentFamilyTitle = rawSearchSurname 
+      ? `${rawSearchSurname.charAt(0).toUpperCase() + rawSearchSurname.slice(1)} Family Invitation`
+      : "Our Dearest Family & Friends";
     let currentMemberList = ["Honoured Guest"];
     let hasCeremonyInvite = true;
-    let currentRowId = null;
+    let currentRowId = rowIdParam || null;
     const rsvpResponses = {};
 
     function parseCSVLine(line) {
@@ -1617,16 +1611,17 @@
     }
 
     async function loadGuestDataFromSheet() {
+      // Paint instantaneous title first (e.g. Cele Family Invitation)
       updateEnvelopeAndPlaque();
       renderFamilyRSVP();
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const rowIdParam = urlParams.get("id");
-      const searchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").toLowerCase().trim();
+      const searchSurname = rawSearchSurname.toLowerCase();
 
       if (rowIdParam || searchSurname) {
         try {
-          const res = await fetch(SHEET_CSV_URL);
+          const res = await earlySheetFetchPromise;
+          if (!res) return;
+
           const csvText = await res.text();
           const lines = csvText.trim().split(/\r?\n/);
 
@@ -1699,9 +1694,17 @@
         }
       }
 
+      // Re-render once data has resolved
       updateEnvelopeAndPlaque();
       updateCeremonyVisibility();
       renderFamilyRSVP();
+    }
+
+    // Run as fast as HTML elements are available
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
+    } else {
+      loadGuestDataFromSheet();
     }
 
     function updateEnvelopeAndPlaque() {
