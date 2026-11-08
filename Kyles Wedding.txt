@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="envelope-locked">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -73,9 +73,9 @@
     .sans-caps {
       font-family: 'Montserrat', system-ui, sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.24em;
-      font-size: 0.65rem;
-      font-weight: 400;
+      letter-spacing: 0.22em;
+      font-size: 0.76rem;
+      font-weight: 500;
     }
 
     /* Reversible Parallax Reveal */
@@ -91,175 +91,423 @@
       transform: translateY(0);
     }
 
-    /* -------------------------------------------
-       1. ENVELOPE TOP FOLD BANNER (WARM BEIGE & GOLD)
-    -------------------------------------------- */
-    .env-header {
-      background: linear-gradient(180deg, #dac9aa 0%, #c9b592 100%);
-      color: var(--text-dark);
-      padding: calc(3.2rem + env(safe-area-inset-top)) 1.5rem 3.5rem;
-      text-align: center;
-      position: relative;
+    /* Scroll Lock while envelope is sealed */
+    html.envelope-locked,
+    body.envelope-locked {
+      overflow: hidden !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      overscroll-behavior: none !important;
     }
 
-    .env-header::after {
-      content: '';
-      position: absolute;
+    /* ==============================================
+       REALISTIC TEXTURED 3D ENVELOPE (PERFECTLY CENTERED)
+    ============================================== */
+    #envelope-overlay {
+      position: fixed;
+      top: 0;
       bottom: 0;
       left: 0;
-      width: 100%;
-      height: 38px;
-      background: var(--ivory);
-      clip-path: polygon(0 100%, 50% 0, 100% 100%);
-    }
-
-    .env-names {
-      font-size: 3.6rem;
-      letter-spacing: 0.02em;
-      color: var(--text-dark);
-    }
-
-    .env-ampersand {
-      font-size: 2.2rem;
-      display: block;
-      margin: -0.4rem 0;
-      color: var(--gold-dark);
-    }
-
-    .env-date {
-      margin-top: 1.8rem;
-      font-family: 'Montserrat', system-ui, sans-serif;
-      letter-spacing: 0.32em;
-      font-size: 0.76rem;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-
-    /* -------------------------------------------
-       2. EDITORIAL PHOTO & QUOTE
-    -------------------------------------------- */
-    .photo-section {
-      padding: 2.5rem 1.75rem 1.5rem;
-      text-align: center;
-    }
-
-    .photo-frame {
-      width: 100%;
-      height: 380px;
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(96, 69, 29, 0.12);
-      border: 1px solid var(--border-thin);
-    }
-
-    .photo-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .quote-text {
-      font-size: 1.05rem;
-      font-style: italic;
-      color: var(--text-dark);
-      margin: 1.5rem auto 1rem;
-      max-width: 320px;
-      line-height: 1.5;
-    }
-
-    /* -------------------------------------------
-       3. AMBIENT MUSIC PLAYER
-    -------------------------------------------- */
-    .player-widget {
-      padding: 0.5rem 2rem 2.5rem;
-      text-align: center;
-    }
-
-    .player-label {
-      font-size: 0.8rem;
-      font-style: italic;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-    }
-
-    .player-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.25rem;
-      color: var(--text-dark);
-      margin-bottom: 0.6rem;
-    }
-
-    .player-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-dark);
-      display: flex;
-      align-items: center;
-    }
-
-    .play-pause-circle {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(120deg, #cbaa70, #96713b);
-      color: #FFFFFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(180, 147, 88, 0.35);
-      border: none;
-      cursor: pointer;
-    }
-
-    .progress-track {
-      width: 100%;
-      max-width: 220px;
-      height: 2px;
-      background: rgba(180, 147, 88, 0.25);
+      right: 0;
       margin: 0 auto;
+      width: 100%;
+      max-width: 440px;
+      height: 100dvh;
+      z-index: 99999;
+      perspective: 1600px;
+      overflow: hidden;
+      background: transparent !important;
+      pointer-events: auto;
+      touch-action: none;
+      overscroll-behavior: none;
+    }
+
+    #envelope-overlay.unwrapped {
+      display: none !important;
+      pointer-events: none;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      cursor: pointer;
+      overflow: hidden;
+      perspective: 1600px;
+      background: transparent !important;
+      touch-action: none;
+    }
+
+    .env-flap-left,
+    .env-flap-right,
+    .env-flap-bottom,
+    .env-flap-top {
+      background-color: #ede4d3;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.25) 0%, transparent 80%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperFibers'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='6' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='2.2' result='light'%3E%3CfeDistantLight azimuth='55' elevation='58'/%3E%3C/feDiffuseLighting%3E%3CfeBlend mode='multiply' in='SourceGraphic' in2='light'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFibers)' fill='%23ede4d3'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      background-repeat: repeat;
+      
+      /* Keep flaps fully visible as they turn 180 degrees */
+      -webkit-backface-visibility: visible !important;
+      backface-visibility: visible !important;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* 1. TOP FLAP */
+    .env-flap-top {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: 50.5%;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      z-index: 5;
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 10px 24px rgba(60, 42, 18, 0.22);
+    }
+
+    /* 2. BOTTOM FLAP */
+    .env-flap-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: 50.5%;
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+      transform-origin: bottom center;
+      z-index: 4;
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 -8px 20px rgba(60, 42, 18, 0.16);
+    }
+
+    /* 3. LEFT FLAP */
+    .env-flap-left {
+      position: absolute;
+      top: -1px;
+      left: -2px;
+      width: calc(50.5% + 2px);
+      height: calc(100% + 2px);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      transform-origin: left center;
+      z-index: 3;
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 5px 0 16px rgba(60, 42, 18, 0.12);
+    }
+
+    /* 4. RIGHT FLAP */
+    .env-flap-right {
+      position: absolute;
+      top: -1px;
+      right: -2px;
+      width: calc(50.5% + 2px);
+      height: calc(100% + 2px);
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+      transform-origin: right center;
+      z-index: 3;
+      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: -5px 0 16px rgba(60, 42, 18, 0.12);
+    }
+
+    /* Envelope Front Callout */
+    .env-guest-callout {
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 88%;
+      max-width: 350px;
+      text-align: center;
+      z-index: 6;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .guest-pretitle {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #7d6342;
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .guest-family-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.1rem, 6.5vw, 2.7rem);
+      font-style: italic;
+      color: #2e2114;
+      line-height: 1.18;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-shadow: 
+        0 1px 2px rgba(255, 255, 255, 0.95),
+        0 0 1px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Wax Seal Button */
+    .env-seal-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      z-index: 7;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+    }
+
+    .seal-graphic-img {
+      width: 120%;
+      height: 120%;
+      object-fit: cover;
+      transform: scale(1.1);
+      border-radius: 50%;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .env-seal-button:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    /* Outward Opening Action */
+    .envelope-wrapper.open .env-flap-top {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-wrapper.open .env-flap-bottom {
+      transform: rotateX(-180deg);
+    }
+
+    .envelope-wrapper.open .env-flap-left {
+      transform: rotateY(-180deg);
+    }
+
+    .envelope-wrapper.open .env-flap-right {
+      transform: rotateY(180deg);
+    }
+
+    .envelope-wrapper.open .env-seal-button {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.18);
+      pointer-events: none;
+    }
+
+    .envelope-wrapper.open .env-guest-callout {
+      opacity: 0;
+      transform: translate(-50%, -65%) scale(0.95);
+    }
+
+    /* ==============================================
+       BORDERLESS EDITORIAL INVITATION HERO
+    ============================================== */
+    .formal-plaque-section {
+      padding: calc(3.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
+      background: transparent;
+      text-align: center;
       position: relative;
     }
 
-    .progress-fill {
-      width: 38%;
-      height: 100%;
+    .plaque-frame {
+      border: none;
+      outline: none;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .plaque-eyebrow {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .plaque-title-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(3rem, 11vw, 4rem);
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .plaque-ampersand {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 2.1rem;
+      color: var(--gold);
+      margin: 0.35rem 0;
+      display: block;
+      line-height: 1;
+    }
+
+    .plaque-rule {
+      width: 44px;
+      height: 1px;
       background: var(--gold);
+      margin: 1.75rem auto;
+      opacity: 0.55;
+    }
+
+    .plaque-pleasure {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.12rem;
+      color: var(--text-dark);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .plaque-big-date {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+
+    .plaque-location-sub {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.8rem;
+    }
+
+    .plaque-family-target {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--text-dark);
+      margin: 0.35rem 0 0.85rem;
+    }
+
+    .plaque-individual-names {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.18rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ==============================================
+       EDITORIAL BOTANICAL ACCENTS
+    ============================================== */
+    .botanical-accent {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.88;
+      filter: drop-shadow(0 4px 12px rgba(60, 45, 20, 0.1));
+      transition: transform 0.6s ease;
+    }
+
+    .botanical-hero-tr {
+      top: 15px;
+      right: -25px;
+      width: 140px;
+      transform: rotate(20deg);
+    }
+
+    .botanical-countdown-bl {
+      bottom: -35px;
+      left: -20px;
+      width: 130px;
+      transform: rotate(-35deg);
+      opacity: 0.75;
+    }
+
+    .botanical-dress-tr {
+      top: 20px;
+      right: -20px;
+      width: 125px;
+      transform: rotate(15deg);
+      opacity: 0.8;
+    }
+
+    .botanical-registry-br {
+      bottom: -25px;
+      right: -15px;
+      width: 135px;
+      transform: rotate(-15deg);
     }
 
     /* -------------------------------------------
-       4. WARM SAND PANEL (Countdown & Calendar)
+       4. WARM SAND PANEL (Countdown & Blessing)
     -------------------------------------------- */
     .olive-panel {
-      background: var(--sand-bg);
+      background: transparent;
       color: var(--text-dark);
-      padding: 3rem 1.75rem;
+      padding: 4rem 1.75rem 3.5rem;
       text-align: center;
-      border-top: 1px solid var(--border-thin);
-      border-bottom: 1px solid var(--border-thin);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .olive-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 90% 80% at 50% 50%, rgba(226, 214, 194, 0.55) 0%, rgba(238, 231, 219, 0.2) 65%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .panel-blessing {
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-style: italic;
       color: var(--text-dark);
-      line-height: 1.5;
-      max-width: 300px;
-      margin: 0 auto 2rem;
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0 auto 2.2rem;
+      position: relative;
+      z-index: 1;
     }
 
     .date-badge-box {
-      border-top: 1px solid var(--border-thin);
-      border-bottom: 1px solid var(--border-thin);
-      padding: 0.85rem 0;
+      border-top: 1px solid rgba(180, 147, 88, 0.25);
+      border-bottom: 1px solid rgba(180, 147, 88, 0.25);
+      padding: 0.95rem 0;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      max-width: 300px;
-      margin: 0 auto 2rem;
+      max-width: 310px;
+      margin: 0 auto 2.4rem;
+      position: relative;
+      z-index: 1;
     }
 
     .day-num {
@@ -271,11 +519,13 @@
 
     .countdown-title {
       font-family: 'Montserrat', system-ui, sans-serif;
-      letter-spacing: 0.35em;
-      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      font-size: 0.8rem;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 0.85rem;
+      margin-bottom: 1.1rem;
+      position: relative;
+      z-index: 1;
     }
 
     .countdown-grid {
@@ -286,6 +536,8 @@
       font-size: 2rem;
       line-height: 1;
       color: var(--text-dark);
+      position: relative;
+      z-index: 1;
     }
 
     .countdown-col {
@@ -297,52 +549,11 @@
 
     .countdown-sub {
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.15em;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      margin-top: 0.4rem;
+      margin-top: 0.45rem;
       color: var(--text-muted);
-    }
-
-    .calendar-wrap {
-      margin-top: 2.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border-thin);
-    }
-
-    .calendar-table {
-      width: 100%;
-      max-width: 280px;
-      margin: 1.25rem auto 0;
-      border-collapse: collapse;
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.68rem;
-    }
-
-    .calendar-table th {
-      color: var(--text-muted);
-      font-weight: 500;
-      padding-bottom: 0.6rem;
-      font-size: 0.6rem;
-    }
-
-    .calendar-table td {
-      padding: 0.4rem 0.2rem;
-      color: var(--text-dark);
-      font-weight: 400;
-    }
-
-    .calendar-table .active-day {
-      background: linear-gradient(120deg, #cbaa70, #96713b);
-      color: #FFFFFF;
-      font-weight: 600;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      box-shadow: 0 2px 6px rgba(180, 147, 88, 0.4);
     }
 
     /* -------------------------------------------
@@ -382,37 +593,37 @@
 
     .event-time {
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.88rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       color: var(--gold-dark);
     }
 
     .event-venue {
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.8rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       font-weight: 500;
-      margin: 0.4rem 0 0.15rem;
+      margin: 0.45rem 0 0.2rem;
       color: var(--text-dark);
     }
 
     .event-subvenue {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-style: italic;
       color: var(--text-muted);
-      margin-bottom: 0.95rem;
+      margin-bottom: 1.1rem;
     }
 
     .btn-pill {
       display: inline-block;
-      padding: 0.45rem 1.5rem;
+      padding: 0.55rem 1.6rem;
       border: 1px solid var(--gold);
       border-radius: 20px;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text-dark);
       text-decoration: none;
@@ -508,30 +719,49 @@
     }
 
     .s-time {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
       font-weight: 600;
       color: var(--gold-dark);
       display: block;
     }
 
     .s-desc {
-      font-size: 0.68rem;
+      font-size: 0.76rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       color: var(--text-dark);
       font-weight: 500;
-      margin-top: 0.15rem;
+      margin-top: 0.2rem;
     }
 
     /* -------------------------------------------
-       7. DRESS CODE (WARM LINEN FILL)
+       7. DRESS CODE (RESTORED & SMOOTHLY BLENDED)
     -------------------------------------------- */
     .dress-code-section {
-      padding: 2.5rem 1.75rem;
+      padding: 4.5rem 1.75rem 3.5rem;
       text-align: center;
-      border-top: 1px solid var(--border-thin);
-      background: var(--panel-warm);
+      background: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dress-code-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 95% 85% at 50% 45%, rgba(232, 222, 206, 0.55) 0%, rgba(238, 230, 215, 0.22) 65%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dress-heading,
+    .attire-type,
+    .dress-img-wrap,
+    .swatch-container,
+    .dress-note {
+      position: relative;
+      z-index: 1;
     }
 
     .dress-heading {
@@ -542,8 +772,8 @@
 
     .attire-type {
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
+      font-size: 0.88rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--gold-dark);
       font-weight: 600;
@@ -560,26 +790,19 @@
       height: 155px;
       object-fit: contain;
       mix-blend-mode: multiply;
+      display: block;
     }
 
     .dress-note {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-style: italic;
       color: var(--text-muted);
-      max-width: 280px;
+      max-width: 300px;
       margin: 0 auto;
-      line-height: 1.45;
+      line-height: 1.55;
     }
 
-    /* ==============================================
-       DRESS CODE COLOR SWATCHES
-    ============================================== */
-    /* ==============================================
-       DRESS CODE COLOR SWATCHES (BALANCED SINGLE ROW)
-    ============================================== */
-    /* ==============================================
-       DRESS CODE COLOR SWATCHES (HORIZONTAL ROW)
-    ============================================== */
+    /* Color Swatches (Strict Horizontal Row) */
     .swatch-container {
       margin: 1.5rem auto 1.25rem;
       width: 100%;
@@ -591,7 +814,7 @@
     .swatch-eyebrow {
       display: block;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.58rem;
+      font-size: 0.68rem;
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--gold-dark);
@@ -600,7 +823,6 @@
       text-align: center;
     }
 
-    /* Force a strict single horizontal flex line */
     .swatch-grid {
       display: flex !important;
       flex-direction: row !important;
@@ -632,78 +854,58 @@
 
     .swatch-name {
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.46rem;
-      letter-spacing: 0.04em;
+      font-size: 0.54rem;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--text-muted);
-      margin-top: 0.35rem;
-      line-height: 1.2;
+      color: var(--text-dark);
+      margin-top: 0.4rem;
+      line-height: 1.25;
       text-align: center;
       width: 100%;
       display: block;
       white-space: normal;
       word-break: break-word;
+      font-weight: 500;
     }
 
     .swatch-item:hover .swatch-circle {
       transform: translateY(-2px) scale(1.06);
     }
 
-
-    /* -------------------------------------------
-       9. CONFIRMATION / RSVP (DEEP WARM TAUPE)
-    -------------------------------------------- */
-    .rsvp-panel {
-      background: #4a3c2b;
-      color: #FFFFFF;
-      padding: 2.8rem 1.75rem;
-      text-align: center;
-    }
-
-    .rsvp-envelope-art {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 0.5rem;
-      display: block;
-      object-fit: contain;
-      mix-blend-mode: screen;
-    }
-
-    .rsvp-title {
-      font-size: 2.6rem;
-      margin-bottom: 0.35rem;
-      color: #FFFFFF;
-    }
-
-    .rsvp-deadline {
-      font-size: 0.95rem;
-      font-style: italic;
-      color: var(--gold-light);
-      margin-bottom: 1.25rem;
-    }
-
     /* ==============================================
-       REFINED EDITORIAL RSVP (NO GRADIENTS)
+       REFINED EDITORIAL RSVP (SOFT BLEND)
     ============================================== */
     .rsvp-section {
-      padding: 3.5rem 1.5rem 3rem;
-      background: var(--sand-bg);
+      padding: 4rem 1.5rem 2.5rem;
+      background: transparent;
       text-align: center;
-      border-top: 1px solid var(--border-thin);
+      position: relative;
+      overflow: hidden;
     }
 
-    .rsvp-ornament {
-      font-size: 18px;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-      opacity: 0.8;
+    .rsvp-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 90% 70% at 50% 25%, rgba(234, 225, 210, 0.5) 0%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .rsvp-eyebrow,
+    .rsvp-title,
+    .rsvp-subnote,
+    .guest-rsvp-list,
+    .btn-rsvp-submit,
+    .rsvp-status-msg {
+      position: relative;
+      z-index: 1;
     }
 
     .rsvp-eyebrow {
       display: block;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.58rem;
+      font-size: 0.68rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--gold-dark);
@@ -722,144 +924,124 @@
 
     .rsvp-subnote {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-style: italic;
       color: var(--text-muted);
       margin-bottom: 2rem;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
-    /* Guest Card - Clean flat stationery border */
+    /* Borderless RSVP Guest Rows */
     .guest-rsvp-list {
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-      max-width: 380px;
-      margin: 0 auto 1.6rem;
+      gap: 1.25rem;
+      max-width: 360px;
+      margin: 0 auto 2.2rem;
     }
 
     .guest-rsvp-card {
-      background: #FFFFFF;
-      border: 1px solid rgba(180, 147, 88, 0.28);
-      border-radius: 6px;
-      padding: 1.1rem 1rem;
-      box-shadow: 0 2px 10px rgba(96, 69, 29, 0.04);
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0.5rem 0.25rem 1rem;
       text-align: center;
-      transition: border-color 0.25s ease;
+      position: relative;
     }
 
-    .guest-rsvp-card:focus-within {
-      border-color: var(--gold);
+    .guest-rsvp-card:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180, 147, 88, 0.35), transparent);
     }
 
     .guest-name-label {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.35rem;
+      font-size: 1.55rem;
+      font-style: italic;
       font-weight: 500;
       color: var(--text-dark);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
       display: block;
       letter-spacing: 0.02em;
     }
 
-    /* Flat Button Pair - Clean & Tactile */
     .rsvp-button-pair {
       display: flex;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 0.65rem;
+      max-width: 320px;
+      margin: 0 auto;
     }
 
     .choice-btn {
       flex: 1;
-      padding: 0.65rem 0.5rem;
-      border: 1px solid rgba(180, 147, 88, 0.35);
-      background: #FAF8F5; /* Pure flat off-white */
+      padding: 0.65rem 0.75rem;
+      border: 1px solid rgba(180, 147, 88, 0.4);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(4px);
       color: var(--text-dark);
-      border-radius: 4px; /* Crisp tailored corners */
+      border-radius: 24px;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
+      font-size: 0.64rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
       outline: none;
     }
 
     .choice-btn:hover {
       border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.75);
     }
 
-    /* Flat Active State: Joyfully Accept (Warm Deep Gold/Ochre) */
     .choice-btn.accept.active {
-      background: #96713B; /* Flat solid gold */
+      background: #96713B;
       border-color: #96713B;
       color: #FFFFFF;
       font-weight: 600;
+      box-shadow: 0 4px 12px rgba(150, 113, 59, 0.28);
+      transform: translateY(-1px);
     }
 
-    /* Flat Active State: Regretfully Decline (Muted Taupe) */
     .choice-btn.decline.active {
-      background: #82735D; /* Flat solid taupe */
-      border-color: #82735D;
+      background: #6a5a47;
+      border-color: #6a5a47;
       color: #FFFFFF;
       font-weight: 600;
+      box-shadow: 0 4px 12px rgba(87, 70, 48, 0.2);
+      transform: translateY(-1px);
     }
 
-    /* Extra Text Fields - Minimal underline style */
-    .rsvp-extra-fields {
-      max-width: 380px;
-      margin: 0 auto 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
-
-    .rsvp-text-input {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      border-radius: 4px;
-      border: 1px solid rgba(180, 147, 88, 0.3);
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.05rem;
-      background: #FFFFFF;
-      color: var(--text-dark);
-      outline: none;
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .rsvp-text-input::placeholder {
-      color: #A39683;
-      font-style: italic;
-    }
-
-    .rsvp-text-input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 2px rgba(180, 147, 88, 0.15);
-    }
-
-    /* Primary Flat Action Button */
     .btn-rsvp-submit {
       display: inline-block;
       width: 100%;
-      max-width: 380px;
+      max-width: 330px;
       padding: 0.95rem 1.5rem;
-      background: #574630; /* Solid classic walnut */
+      background: #574630;
       color: #F8F4EC;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.24em;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       font-weight: 500;
-      border-radius: 4px;
+      border-radius: 25px;
       border: 1px solid #574630;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(87, 70, 48, 0.15);
-      transition: background 0.25s ease, transform 0.15s ease;
+      box-shadow: 0 4px 14px rgba(87, 70, 48, 0.18);
+      transition: all 0.25s ease;
     }
 
     .btn-rsvp-submit:hover {
       background: #433523;
       border-color: #433523;
+      transform: translateY(-1px);
     }
 
     .btn-rsvp-submit:active {
@@ -868,7 +1050,7 @@
 
     .rsvp-status-msg {
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.7rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--gold-dark);
@@ -876,542 +1058,34 @@
       min-height: 18px;
     }
 
-    .btn-confirm {
-      display: inline-block;
-      padding: 0.8rem 2.2rem;
-      background: linear-gradient(110deg, #9b7338, #e1c389, #a78043, #d5b577, #9b7338);
-      background-size: 250% 100%;
-      color: #FFFFFF;
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      font-weight: 600;
-      border-radius: 25px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-      transition: all 0.2s ease;
-      text-shadow: 0 1px 2px rgba(60, 40, 15, 0.4);
-    }
-
-    .btn-confirm:active {
-      transform: scale(0.97);
-    }
-
-    /* -------------------------------------------
-       10. RECEPTION ETIQUETTE & CLOSING
-    -------------------------------------------- */
-    /* -------------------------------------------
-       10. RECEPTION ETIQUETTE & CLOSING
-    -------------------------------------------- */
-    .etiquette-section {
-      padding: 1.5rem 1.75rem 2.5rem; /* Cut top padding down from 3rem */
-      text-align: center;
-      background: var(--ivory);
-    }
-
-    .closing-thanks {
-      margin-top: 0.5rem; /* Reduced from 2rem */
-      padding-top: 1rem;  /* Reduced from 1.5rem */
-      border-top: 1px solid var(--border-thin);
-    }
-
-    .closing-msg {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-    }
-
-    .closing-script {
-      font-size: 2.8rem;
-      color: var(--gold-dark);
-    }
-
-    /* -------------------------------------------
-       11. INTERACTIVE RSVP MODAL
-    -------------------------------------------- */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(87, 70, 48, 0.7);
-      backdrop-filter: blur(4px);
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-card {
-      background: var(--ivory);
-      width: 100%;
-      max-width: 360px;
-      border-radius: 12px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-      border: 1px solid var(--gold-light);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 14px;
-      right: 16px;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-
-    .modal-input {
-      width: 100%;
-      padding: 0.85rem;
-      font-size: 16px;
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      border: 1px solid var(--border-thin);
-      border-radius: 6px;
-      margin-bottom: 0.85rem;
-      outline: none;
-      background: #FFFFFF;
-      color: var(--text-dark);
-    }
-
-    .modal-input:focus {
-      border-color: var(--gold);
-    }
-
-    /* Personalized Guest Callout on Envelope Front */
-    .env-guest-callout {
-      position: absolute;
-      top: 26%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 85%;
-      max-width: 340px;
-      text-align: center;
-      z-index: 6; /* Sits above flaps, under the seal */
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .guest-pretitle {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 500;
-    }
-
-    .guest-family-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(1.8rem, 5.5vw, 2.3rem);
-      font-style: italic;
-      color: var(--text-dark);
-      line-height: 1.15;
-      font-weight: 500;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-    }
-
-    .guest-gold-accent {
-      font-size: 1rem;
-      color: var(--gold);
-      margin-top: 0.25rem;
-      opacity: 0.85;
-    }
-
-    /* Fades the name out smoothly as flaps open */
-    .envelope-wrapper.open .env-guest-callout {
-      opacity: 0;
-      transform: translate(-50%, -65%) scale(0.95);
-    }
-
-    /* ==============================================
-       SEAMLESS 4-FLAP UNWRAP (WARM BEIGE PALETTE)
-    ============================================== */
-    /* ==============================================
-       REALISTIC TEXTURED 3D ENVELOPE (BEIGE)
-    ============================================== */
-    #envelope-overlay {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      max-width: 440px;
-      margin: 0 auto;
-      height: 100dvh;
-      z-index: 99999;
-      perspective: 1600px;
-      overflow: hidden;
-      background: transparent;
-      pointer-events: auto;
-    }
-
-    #envelope-overlay.unwrapped {
-      pointer-events: none;
-    }
-
-    .envelope-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100dvh;
-      cursor: pointer;
-      overflow: hidden;
-      perspective: 1600px;
-      background: transparent;
-    }
-
-    /* Natural Paper Texture Overlay across all flaps */
-    .env-flap-left::after,
-    .env-flap-right::after,
-    .env-flap-bottom::after,
-    .env-flap-top::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: 0.12; /* Subtle paper grain visible on color */
-      mix-blend-mode: overlay;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23fff' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
-    }
-
-    /* 1. TOP FLAP: Folds upward 180° around the top edge */
-    .env-flap-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50.2%;
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      background: linear-gradient(180deg, #c5b290 0%, #dac9aa 100%);
-      transform-origin: top center;
-      z-index: 5;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      
-      /* Multi-layered shadows for paper thickness and depth */
-      box-shadow: 0 10px 25px rgba(96, 69, 29, 0.28), 
-                  inset 0 -1px 3px rgba(255, 255, 255, 0.4),
-                  inset 0 3px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    /* 2. BOTTOM FLAP: Folds downward 180° around the bottom edge */
-    .env-flap-bottom {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50.2%;
-      clip-path: polygon(0 100%, 50% 0, 100% 100%);
-      background: linear-gradient(0deg, #baaa8c 0%, #cebe9f 100%);
-      transform-origin: bottom center;
-      z-index: 4;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      
-      box-shadow: 0 -10px 25px rgba(96, 69, 29, 0.2),
-                  inset 0 1px 3px rgba(255, 255, 255, 0.3),
-                  inset 0 -3px 5px rgba(0, 0, 0, 0.15);
-    }
-
-    /* 3. LEFT FLAP: Folds outward 180° around the left edge */
-    .env-flap-left {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50.2%;
-      height: 100%;
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
-      background: linear-gradient(90deg, #c0af90 0%, #cfbea0 100%);
-      transform-origin: left center;
-      z-index: 3;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      
-      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.12),
-                  inset -1px 0 3px rgba(255, 255, 255, 0.25),
-                  inset 3px 0 5px rgba(0, 0, 0, 0.08);
-    }
-
-    /* 4. RIGHT FLAP: Folds outward 180° around the right edge */
-    .env-flap-right {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50.2%;
-      height: 100%;
-      clip-path: polygon(100% 0, 0 50%, 100% 100%);
-      background: linear-gradient(270deg, #bca98a 0%, #cbbaa0 100%);
-      transform-origin: right center;
-      z-index: 3;
-      transition: transform 1700ms cubic-bezier(0.35, 0, 0.25, 1);
-      
-      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.12),
-                  inset 1px 0 3px rgba(255, 255, 255, 0.25),
-                  inset -3px 0 5px rgba(0, 0, 0, 0.08);
-    }
-
-    /* Centered Antique Gold Wax Seal with enhanced natural shadow */
-    .env-seal-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 105px;
-      height: 105px;
-      border-radius: 50%;
-      z-index: 7;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: transparent;
-      
-      /* Multi-level Drop Shadows for rich thickness */
-      box-shadow: 0 14px 32px rgba(96, 65, 27, 0.48), 
-                  0 4px 12px rgba(0, 0, 0, 0.3),
-                  inset 0 -2px 5px rgba(0, 0, 0, 0.2);
-                  
-      transition: transform 0.35s cubic-bezier(0.35, 0, 0.25, 1), opacity 0.35s ease;
-      overflow: hidden;
-    }
-
-    .seal-graphic-img {
-      width: 120%;  /* Slightly zoomed-in to crop out any black edge */
-      height: 120%; /* Scaled together with width */
-      object-fit: cover;
-      transform: scale(1.1); /* Brings the gold details and ridges forward */
-      border-radius: 50%;
-      display: block;
-      pointer-events: none;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    /* Tactile gesture feedback */
-    .env-seal-button:hover {
-      transform: translate(-50%, -50%) scale(1.05);
-    }
-
-    /* Outward dissolution */
-    .envelope-wrapper.open .env-seal-button,
-    .envelope-wrapper.open .env-tap-cue {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(1.18);
-      pointer-events: none;
-    }
-
-    .seal-inner-ring {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 1px dashed rgba(177, 172, 157, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .seal-initials {
-      font-family: 'Cinzel', serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #443611;
-      text-shadow: 0 1px 1px rgba(60, 40, 15, 0.4);
-      letter-spacing: 0.08em;
-    }
-
-    .env-tap-cue {
-      position: absolute;
-      top: calc(50% + 56px);
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.28em;
-      color: var(--text-dark);
-      white-space: nowrap;
-      z-index: 7;
-      animation: pulseCue 2.2s infinite ease-in-out;
-    }
-
-    @keyframes pulseCue {
-      0%, 100% { opacity: 0.45; transform: translateX(-50%) translateY(0); }
-      50% { opacity: 1; transform: translateX(-50%) translateY(3px); }
-    }
-
-    /* THE OUTWARD FLAP UNFOLD */
-    .envelope-wrapper.open .env-flap-top {
-      transform: rotateX(180deg);
-    }
-
-    .envelope-wrapper.open .env-flap-bottom {
-      transform: rotateX(-180deg);
-    }
-
-    .envelope-wrapper.open .env-flap-left {
-      transform: rotateY(-180deg);
-    }
-
-    .envelope-wrapper.open .env-flap-right {
-      transform: rotateY(180deg);
-    }
-
-    .envelope-wrapper.open .env-seal-button,
-    .envelope-wrapper.open .env-tap-cue {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(1.15);
-      pointer-events: none;
-    }
-
-    /* ==============================================
-       BORDERLESS EDITORIAL INVITATION HERO
-    ============================================== */
-    .formal-plaque-section {
-      padding: calc(3.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
-      background: transparent;
-      text-align: center;
-    }
-
-    .plaque-frame {
-      /* Drop all boxes, lines, borders, and card backgrounds */
-      border: none;
-      outline: none;
-      box-shadow: none;
-      background: transparent;
-      padding: 0;
-      margin: 0 auto;
-      max-width: 360px;
-      text-align: center;
-    }
-
-    /* Remove the corner diamond stars */
-    .plaque-frame::before,
-    .plaque-frame::after {
-      content: none;
-    }
-
-    .plaque-ornament {
-      font-size: 20px;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 1.25rem;
-      opacity: 0.75;
-    }
-
-    .plaque-eyebrow {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-    }
-
-    .plaque-title-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(3rem, 11vw, 4rem);
-      font-weight: 400;
-      color: var(--text-dark);
-      line-height: 1;
-      letter-spacing: 0.02em;
-      margin: 0;
-    }
-
-    .plaque-ampersand {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 2.1rem;
-      color: var(--gold);
-      margin: 0.35rem 0;
-      display: block;
-      line-height: 1;
-    }
-
-    .plaque-rule {
-      width: 44px;
-      height: 1px;
-      background: var(--gold);
-      margin: 1.75rem auto;
-      opacity: 0.55;
-    }
-
-    .plaque-pleasure {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 1.12rem;
-      color: var(--text-dark);
-      line-height: 1.75;
-      margin-bottom: 1.5rem;
-      opacity: 0.9;
-    }
-
-    .plaque-big-date {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 2rem;
-      letter-spacing: 0.12em;
-      color: var(--text-dark);
-      font-weight: 500;
-      margin-bottom: 0.35rem;
-    }
-
-    .plaque-location-sub {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 1.8rem;
-    }
-
-    .plaque-family-target {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.75rem;
-      font-weight: 500;
-      font-style: italic;
-      color: var(--text-dark);
-      margin: 0.35rem 0 0.85rem;
-    }
-
-    .plaque-individual-names {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.18rem;
-      color: var(--text-muted);
-      margin-bottom: 1.75rem;
-    }
-
     /* ==============================================
        WISHING WELL / REGISTRY SECTION
     ============================================== */
     .registry-section {
-      padding: 0.5rem 1.5rem 0; /* Reduced bottom padding to 0 */
-      background: var(--ivory);
+      padding: 3.5rem 1.5rem 3rem;
+      background: transparent;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .registry-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(225, 214, 195, 0.45) 0%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .registry-card {
+      position: relative;
+      z-index: 1;
       background: #FAF7F2;
       border: 1px solid rgba(180, 147, 88, 0.35);
-      border-radius: 6px;
-      padding: 2.2rem 1.5rem 1.8rem;
-      max-width: 380px;
+      border-radius: 8px;
+      padding: 3rem 1.85rem 2.5rem;
+      max-width: 360px;
       margin: 0 auto;
       box-shadow: 0 4px 18px rgba(96, 69, 29, 0.06);
     }
@@ -1419,7 +1093,7 @@
     .registry-eyebrow {
       display: block;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.58rem;
+      font-size: 0.68rem;
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--gold-dark);
@@ -1457,7 +1131,7 @@
       justify-content: space-between;
       align-items: center;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.76rem;
     }
 
     .bank-label {
@@ -1476,31 +1150,64 @@
     .btn-copy-account {
       display: inline-block;
       width: 100%;
-      padding: 0.75rem 1rem;
+      max-width: 330px;
+      padding: 0.95rem 1.5rem;
       background: #574630;
       color: #F8F4EC;
       font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.62rem;
+      font-size: 0.72rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       font-weight: 500;
-      border-radius: 4px;
+      border-radius: 25px;
       border: 1px solid #574630;
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.15s ease;
+      box-shadow: 0 4px 14px rgba(87, 70, 48, 0.18);
+      transition: all 0.25s ease;
+      margin-top: 0.5rem;
     }
 
     .btn-copy-account:hover {
       background: #433523;
+      border-color: #433523;
+      transform: translateY(-1px);
     }
 
     .btn-copy-account:active {
       transform: scale(0.98);
     }
 
+    /* -------------------------------------------
+       10. RECEPTION ETIQUETTE & CLOSING
+    -------------------------------------------- */
+    .etiquette-section {
+      padding: 1.5rem 1.75rem 3rem;
+      text-align: center;
+      background: var(--ivory);
+    }
+
+    .closing-thanks {
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-thin);
+    }
+
+    .closing-msg {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .closing-script {
+      font-size: 2.8rem;
+      color: var(--gold-dark);
+    }
   </style>
 </head>
-<body>
+<body class="envelope-locked">
 
   <!-- ==============================================
        SEAMLESS 4-FLAP UNWRAP ENVELOPE OVERLAY (BEIGE)
@@ -1514,14 +1221,13 @@
       <div class="env-flap-bottom"></div>
       <div class="env-flap-top" id="envFlap"></div>
 
-      <!-- Personalized Dynamic Guest Plaque -->
+      <!-- Personalized Dynamic Guest Plaque on Envelope Front -->
       <div class="env-guest-callout" id="envGuestBox">
         <span class="guest-pretitle">A special invitation for</span>
-        <h2 class="guest-family-name" id="guestFamilyName"></h2>
+        <h2 class="guest-family-name" id="guestFamilyName">Our Dearest Family &amp; Friends</h2>
       </div>
 
       <!-- Centered Gold Seal -->
-      <!-- Real Wax Seal Image Button -->
       <div class="env-seal-button" id="envSeal">
         <img src="seal.png" alt="Kyle & Kevona Wax Seal" class="seal-graphic-img" />
       </div>
@@ -1532,6 +1238,7 @@
        BORDERLESS EDITORIAL INVITATION HERO
   =============================================== -->
   <section class="formal-plaque-section reveal">
+    <img src="green1.png" alt="" class="botanical-accent botanical-hero-tr" loading="lazy" />
     <div class="plaque-frame">
       <p class="plaque-eyebrow">Together with their families</p>
       
@@ -1551,33 +1258,16 @@
       <div class="plaque-rule"></div>
 
       <p class="plaque-eyebrow">Especially Invited</p>
-      <h2 class="plaque-family-target" id="plaqueFamilyTitle">The Govender Family</h2>
+      <h2 class="plaque-family-target" id="plaqueFamilyTitle">Our Dearest Family &amp; Friends</h2>
       
       <div class="plaque-individual-names" id="plaqueMemberList">
-        <span>Ricky Govender</span>
-        <span>Mandy Govender</span>
-        <span>Nigel Govender</span>
+        <span>Honoured Guests</span>
       </div>
     </div>
   </section>
 
   <!-- ==============================================
-       2. EDITORIAL OPENING PHOTO (opening.jpg)
-  =============================================== -->
-  <!-- <section class="photo-section">
-    <div class="photo-frame reveal">
-      <img src="opening.jpg" alt="Kyle &amp; Kevona Celebration" style="object-position: center;" />
-    </div>
-
-    <div class="reveal">
-      <p class="quote-text">
-        "Two lives, two hearts, joined together in friendship, united forever in love."
-      </p>
-    </div>
-  </section> -->
-
-  <!-- ==============================================
-       4. SAND PANEL: BLESSING, COUNTDOWN & CALENDAR
+       4. SAND PANEL: BLESSING & COUNTDOWN
   =============================================== -->
   <section class="olive-panel">
     <div class="reveal">
@@ -1601,21 +1291,6 @@
         <span style="opacity: 0.6; color: var(--gold);">:</span>
         <div class="countdown-col"><span id="cd-secs">--</span><span class="countdown-sub">Secs</span></div>
       </div>
-
-      <!-- <div class="calendar-wrap">
-        <span class="sans-caps" style="letter-spacing: 0.3em; font-size: 0.7rem; color: var(--text-muted);">The Big Day • February 2027</span>
-        <table class="calendar-table">
-          <thead>
-            <tr><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th><th>SUN</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
-            <tr><td>8</td><td>9</td><td>10</td><td>11</td><td><span class="active-day">12</span></td><td>13</td><td>14</td></tr>
-            <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
-            <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
-          </tbody>
-        </table>
-      </div> -->
     </div>
   </section>
 
@@ -1625,7 +1300,7 @@
   <section class="location-section">
     <!-- Holy Ceremony (holy_matrimony.png) -->
     <div class="event-block reveal" id="ceremony-event-card">
-      <img src="the_reception.png" alt="The Reception" class="art-img reception-art" />
+      <img src="holy_matrimony.png" alt="Holy Ceremony" class="art-img church-art" />
       <h3 class="script-title event-heading">Holy Matrimony</h3>
       <p class="event-time">2:30 PM</p>
       <p class="event-venue">The Unalome Venue</p>
@@ -1637,12 +1312,11 @@
 
     <!-- The Reception (the_reception.png) -->
     <div class="event-block reveal">
-      <img src="holy_matrimony.png" alt="Holy Ceremony" class="art-img church-art" />
-      <h3 class="script-title event-heading">Reception</h3>
-      <p class="event-subvenue">Dinner, Toasts &amp; Celebration</p>
+      <img src="the_reception.png" alt="The Reception" class="art-img reception-art" />
+      <h3 class="script-title event-heading">The Reception</h3>
       <p class="event-time">5:30 PM</p>
-      <p class="event-venue">The Unalome Venue</p>
-      <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
+      <p class="event-venue">The Grand Pavilion • The Unalome Venue</p>
+      <p class="event-subvenue">Dinner, Toasts &amp; Celebration</p>
       <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
         View Location
       </a>
@@ -1657,8 +1331,6 @@
       <h2 class="script-title timeline-title">Order of Events</h2>
       
       <div class="serpentine-container">
-        
-
         <!-- 1. Ceremony (holy_matrimony.png) -->
         <div class="serpentine-row reveal" id="timeline-ceremony-node">
           <div class="serpentine-node">
@@ -1713,20 +1385,12 @@
             <span class="s-desc">Cake Cutting</span>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- Photo Break Card -->
-  <!-- <section class="photo-section" style="padding-top: 0;">
-    <div class="photo-frame reveal" style="height: 320px;">
-      <img src="holding.jpg" alt="The Unalome Venue Grounds" style="object-position: center bottom;" />
-    </div>
-  </section> -->
-
   <!-- ==============================================
-       7. DRESS CODE (WITH COLOR PALETTE SWATCHES)
+       7. DRESS CODE (WATERCOLOR SEAMLESS WASH)
   =============================================== -->
   <section class="dress-code-section reveal">
     <h3 class="script-title dress-heading">Dress Code</h3>
@@ -1777,15 +1441,13 @@
   =============================================== -->
   <section class="rsvp-section reveal" id="rsvp-section">
     <span class="rsvp-eyebrow">The Honour Of Your Presence</span>
-    <h3 class="rsvp-title">Kindly RSVP</h3>
+    <h3 class="rsvp-title">RSVP</h3>
     <p class="rsvp-subnote">Please select a response for each invited family member.</p>
 
     <!-- Individual Guest Cards -->
     <div class="guest-rsvp-list" id="guestCardsContainer">
       <!-- Populated dynamically via JS -->
     </div>
-
-
 
     <!-- Submit Action -->
     <button class="btn-rsvp-submit" id="submitRsvpBtn" onclick="sendFamilyRSVP()">
@@ -1794,12 +1456,12 @@
     <p class="rsvp-status-msg" id="rsvpStatusMsg"></p>
   </section>
 
-
-
   <!-- ==============================================
        REGISTRY / WISHING WELL (BANKING DETAILS)
   =============================================== -->
   <section class="registry-section reveal">
+    <div class="registry-card">
+      <img src="green1.png" alt="" class="botanical-accent botanical-registry-br" loading="lazy" />
     
       <span class="registry-eyebrow">A Note On Gifts</span>
       <h3 class="script-title registry-title">Wishing Well</h3>
@@ -1829,10 +1491,10 @@
       <button type="button" class="btn-copy-account" id="copyAccBtn" onclick="copyAccountNumber()">
         Copy Account Number
       </button>
-
+    </div>
   </section>
 
-    <!-- ==============================================
+  <!-- ==============================================
        10. RECEPTION ETIQUETTE & CLOSING
   =============================================== -->
   <section class="etiquette-section reveal">
@@ -1843,35 +1505,7 @@
   </section>
 
   <!-- ==============================================
-       11. INTERACTIVE RSVP MODAL
-  =============================================== -->
-  <div class="modal-overlay" id="rsvpModal">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeRSVPModal()">&times;</button>
-      <h3 class="script-title" style="font-size: 2.2rem; color: var(--gold-dark);">RSVP</h3>
-      <p style="font-size: 0.95rem; font-style: italic; color: var(--text-muted); margin-bottom: 1.25rem;">
-        Kyle &amp; Kevona's Wedding
-      </p>
-
-      <form onsubmit="submitRSVP(event)">
-        <input type="text" class="modal-input" placeholder="Full Guest Name(s)" required autocomplete="name" />
-        <select class="modal-input" required>
-          <option value="" disabled selected>Will you be attending?</option>
-          <option value="yes">Joyfully Accepts</option>
-          <option value="no">Regretfully Declines</option>
-        </select>
-        <input type="tel" class="modal-input" placeholder="WhatsApp Contact Number" required />
-        <input type="text" class="modal-input" placeholder="Dietary restrictions (if any)" />
-        
-        <button type="submit" class="btn-confirm" style="width: 100%; margin-top: 0.5rem;">
-          Submit Response
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- ==============================================
-       SCRIPTS (Observer, Audio, Countdown, Modal)
+       SCRIPTS (Observer, Audio, Countdown, Google Sheets)
   =============================================== -->
   <script>
     /* 1. Bidirectional Parallax Scroll Observer */
@@ -1890,7 +1524,7 @@
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    /* 2. Real-Time Countdown to February 12, 2027 */
+    /* 2. Real-Time Countdown to February 27, 2027 */
     const targetDate = new Date("February 27, 2027 15:30:00").getTime();
 
     function updateCountdown() {
@@ -1907,54 +1541,18 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    /* 3. Ambient Audio Player Simulation */
-    let isPlaying = false;
-    let trackInterval;
-
-    function togglePlayMusic() {
-      const icon = document.getElementById('playIcon');
-      const bar = document.getElementById('trackProgress');
-      isPlaying = !isPlaying;
-
-      if (isPlaying) {
-        icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-        let progress = 38;
-        trackInterval = setInterval(() => {
-          progress = (progress + 1) % 100;
-          bar.style.width = progress + '%';
-        }, 600);
-      } else {
-        icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        clearInterval(trackInterval);
-      }
-    }
-
-    /* 4. RSVP Modal Management */
-    function openRSVPModal() {
-      document.getElementById('rsvpModal').classList.add('active');
-    }
-
-    function closeRSVPModal() {
-      document.getElementById('rsvpModal').classList.remove('active');
-    }
-
-    function submitRSVP(e) {
-      e.preventDefault();
-      alert("Thank you! Your attendance response has been received.");
-      closeRSVPModal();
-    }
-
-    /* 5. Seamless Outward 4-Flap Envelope Unwrap */
+    /* 3. Seamless Outward 4-Flap Envelope Unwrap */
     function openEnvelopeSequence() {
       const envelope = document.getElementById('envelopeWrapper');
       const overlay = document.getElementById('envelope-overlay');
 
       envelope.style.pointerEvents = 'none';
-
-      // 1. All 4 flaps unfold outward in 3D right on top of the live page
       envelope.classList.add('open');
 
-      // 2. Once flaps unfold flat, remove the overlay layer so the guest can scroll freely
+      // Release scroll lock immediately as flaps start unfolding
+      document.documentElement.classList.remove('envelope-locked');
+      document.body.classList.remove('envelope-locked');
+
       setTimeout(() => {
         overlay.classList.add('unwrapped');
         overlay.style.display = 'none';
@@ -1996,6 +1594,9 @@
     }
 
     async function loadGuestDataFromSheet() {
+      updateEnvelopeAndPlaque();
+      renderFamilyRSVP();
+
       const urlParams = new URLSearchParams(window.location.search);
       const rowIdParam = urlParams.get("id");
       const searchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").toLowerCase().trim();
@@ -2006,19 +1607,17 @@
           const csvText = await res.text();
           const lines = csvText.trim().split(/\r?\n/);
 
-          // Find row with headers "Name", "Surname", "Family Members"
           let headerIndex = lines.findIndex(l => {
             const lower = l.toLowerCase();
             return lower.includes("surname") && lower.includes("family members");
           });
-          if (headerIndex === -1) headerIndex = 2; // Row 3 in sheet is index 2
+          if (headerIndex === -1) headerIndex = 2;
 
           const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
 
-          // 1. Direct row match if ?id= is passed
           let matchedRow = null;
           if (rowIdParam && !isNaN(rowIdParam)) {
-            const targetIndex = parseInt(rowIdParam, 10) - 1; // Convert 1-based row to 0-based index
+            const targetIndex = parseInt(rowIdParam, 10) - 1;
             if (lines[targetIndex]) {
               const vals = parseCSVLine(lines[targetIndex]);
               matchedRow = {};
@@ -2027,7 +1626,6 @@
             }
           }
 
-          // 2. Fallback match by surname
           if (!matchedRow && searchSurname) {
             for (let i = headerIndex + 1; i < lines.length; i++) {
               const vals = parseCSVLine(lines[i]);
@@ -2053,14 +1651,12 @@
 
             currentSurname = surnameVal;
 
-            // Envelope & Plaque Title: "______ Family Invitation"
             if (surnameVal) {
               currentFamilyTitle = `${surnameVal} Family Invitation`;
             } else if (primaryName) {
               currentFamilyTitle = `${primaryName} Family Invitation`;
             }
 
-            // Combine Primary Guest + Family Members
             const members = [];
             if (primaryName) members.push(primaryName);
             if (rawMembers) {
@@ -2073,7 +1669,6 @@
             }
             if (members.length > 0) currentMemberList = members;
 
-            // Only 'yes' shows Holy Matrimony
             hasCeremonyInvite = (ceremonyVal === "yes");
           }
         } catch (err) {
@@ -2123,13 +1718,13 @@
               class="choice-btn accept" 
               id="btn-accept-${index}" 
               onclick="setGuestResponse('${name.replace(/'/g, "\\'")}', 'Attending', ${index})">
-              Joyfully Accept
+              Accepts With Pleasure
             </button>
             <button type="button" 
               class="choice-btn decline" 
               id="btn-decline-${index}" 
               onclick="setGuestResponse('${name.replace(/'/g, "\\'")}', 'Declined', ${index})">
-              Regretfully Decline
+              Declines With Regret
             </button>
           </div>
         </div>
@@ -2156,7 +1751,7 @@
 
     async function sendFamilyRSVP() {
       if (Object.keys(rsvpResponses).length < currentMemberList.length) {
-        alert("Please select Joyfully Accept or Regretfully Decline for each invited family member.");
+        alert("Please make a selection (Accept or Decline) for all invited family members before submitting.");
         return;
       }
 
@@ -2164,12 +1759,10 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "Recording RSVP...";
 
-      // Filter only members who joyfully accepted
       const attendingMembers = Object.keys(rsvpResponses).filter(
         name => rsvpResponses[name] === "Attending"
       );
 
-      // Post attending list directly to Google Sheet column G
       if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
         try {
           await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
@@ -2187,13 +1780,11 @@
         }
       }
 
-      // Format clean message for WhatsApp
       let summaryText = `*Wedding RSVP - ${currentFamilyTitle}*\n\n`;
       for (const [name, status] of Object.entries(rsvpResponses)) {
         summaryText += `• ${name}: ${status === 'Attending' ? '✅ Joyfully Accepts' : '❌ Regretfully Declines'}\n`;
       }
 
-      // Organizer WhatsApp number (country code 27 for South Africa)
       const organizerWhatsApp = "27821234567";
       const whatsappURL = `https://wa.me/${organizerWhatsApp}?text=${encodeURIComponent(summaryText)}`;
 
@@ -2221,9 +1812,7 @@
       });
     }
 
-    // Initialize immediately on load
     window.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
-
   </script>
 </body>
 </html>

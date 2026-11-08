@@ -12,13 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
-
-    /* Locks page scroll while the envelope is sealed */
-    body.envelope-locked {
-      overflow: hidden !important;
-      height: 100vh !important;
-    }
-
     :root {
       --gold: #b49358;
       --gold-light: #d8c6a5;
@@ -96,6 +89,403 @@
     .reveal.active {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* Scroll Lock while envelope is sealed */
+    html.envelope-locked,
+    body.envelope-locked {
+      overflow: hidden !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      overscroll-behavior: none !important;
+    }
+
+    /* ==============================================
+       REALISTIC TEXTURED 3D ENVELOPE (PERFECTLY CENTERED)
+    ============================================== */
+    #envelope-overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 440px;
+      height: 100dvh;
+      z-index: 99999;
+      perspective: 1600px;
+      overflow: hidden;
+      background: transparent !important;
+      pointer-events: auto;
+      touch-action: none;
+      overscroll-behavior: none;
+    }
+
+    #envelope-overlay.unwrapped {
+      display: none !important;
+      pointer-events: none;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      cursor: pointer;
+      overflow: hidden;
+      perspective: 1600px;
+      background: transparent !important;
+      touch-action: none;
+    }
+
+    .env-flap-left,
+    .env-flap-right,
+    .env-flap-bottom,
+    .env-flap-top {
+      background-color: #ede4d3;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.25) 0%, transparent 80%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperFibers'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='6' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='2.2' result='light'%3E%3CfeDistantLight azimuth='55' elevation='58'/%3E%3C/feDiffuseLighting%3E%3CfeBlend mode='multiply' in='SourceGraphic' in2='light'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFibers)' fill='%23ede4d3'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      background-repeat: repeat;
+      
+      /* Keep flaps fully visible as they turn 180 degrees */
+      -webkit-backface-visibility: visible !important;
+      backface-visibility: visible !important;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* 1. TOP FLAP: Hinges upward first as the seal breaks */
+    .env-flap-top {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: 50.5%;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      z-index: 5;
+      /* Balanced, weighted paper easing: opens first */
+      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1);
+      box-shadow: 0 10px 24px rgba(60, 42, 18, 0.22);
+    }
+
+    /* 2. BOTTOM FLAP: Follows slightly after the top flap */
+    .env-flap-bottom {
+      position: absolute;
+      bottom: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: 50.5%;
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+      transform-origin: bottom center;
+      z-index: 4;
+      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1) 120ms;
+      box-shadow: 0 -8px 20px rgba(60, 42, 18, 0.16);
+    }
+
+    /* 3. LEFT FLAP: Unfolds gracefully outwards */
+    .env-flap-left {
+      position: absolute;
+      top: -1px;
+      left: -2px;
+      width: calc(50.5% + 2px);
+      height: calc(100% + 2px);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      transform-origin: left center;
+      z-index: 3;
+      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
+      box-shadow: 5px 0 16px rgba(60, 42, 18, 0.12);
+    }
+
+    /* 4. RIGHT FLAP: Unfolds gracefully outwards */
+    .env-flap-right {
+      position: absolute;
+      top: -1px;
+      right: -2px;
+      width: calc(50.5% + 2px);
+      height: calc(100% + 2px);
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+      transform-origin: right center;
+      z-index: 3;
+      transition: transform 1400ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
+      box-shadow: -5px 0 16px rgba(60, 42, 18, 0.12);
+    }
+
+    /* Wax Seal dissolves smoothly on tap */
+    .env-seal-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      z-index: 7;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+    }
+
+    /* Envelope Front Callout */
+    .env-guest-callout {
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 88%;
+      max-width: 350px;
+      text-align: center;
+      z-index: 6;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .guest-pretitle {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #7d6342;
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .guest-family-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.1rem, 6.5vw, 2.7rem);
+      font-style: italic;
+      color: #2e2114;
+      line-height: 1.18;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-shadow: 
+        0 1px 2px rgba(255, 255, 255, 0.95),
+        0 0 1px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Wax Seal Button */
+    .env-seal-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      z-index: 7;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+    }
+
+    .seal-graphic-img {
+      width: 120%;
+      height: 120%;
+      object-fit: cover;
+      transform: scale(1.1);
+      border-radius: 50%;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .env-seal-button:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    /* Outward Opening Action */
+    .envelope-wrapper.open .env-flap-top {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-wrapper.open .env-flap-bottom {
+      transform: rotateX(-180deg);
+    }
+
+    .envelope-wrapper.open .env-flap-left {
+      transform: rotateY(-180deg);
+    }
+
+    .envelope-wrapper.open .env-flap-right {
+      transform: rotateY(180deg);
+    }
+
+    .envelope-wrapper.open .env-seal-button {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.18);
+      pointer-events: none;
+    }
+
+    .envelope-wrapper.open .env-guest-callout {
+      opacity: 0;
+      transform: translate(-50%, -65%) scale(0.95);
+    }
+
+    /* ==============================================
+       BORDERLESS EDITORIAL INVITATION HERO
+    ============================================== */
+    .formal-plaque-section {
+      padding: calc(3.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
+      background: transparent;
+      text-align: center;
+      position: relative;
+    }
+
+    .plaque-frame {
+      border: none;
+      outline: none;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .plaque-eyebrow {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .plaque-title-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(3rem, 11vw, 4rem);
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .plaque-ampersand {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 2.1rem;
+      color: var(--gold);
+      margin: 0.35rem 0;
+      display: block;
+      line-height: 1;
+    }
+
+    .plaque-rule {
+      width: 44px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.75rem auto;
+      opacity: 0.55;
+    }
+
+    .plaque-pleasure {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.12rem;
+      color: var(--text-dark);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .plaque-big-date {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+
+    .plaque-location-sub {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.8rem;
+    }
+
+    .plaque-family-target {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--text-dark);
+      margin: 0.35rem 0 0.85rem;
+    }
+
+    .plaque-individual-names {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.18rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    /* ==============================================
+       EDITORIAL BOTANICAL ACCENTS
+    ============================================== */
+    .botanical-accent {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.88;
+      filter: drop-shadow(0 4px 12px rgba(60, 45, 20, 0.1));
+      transition: transform 0.6s ease;
+    }
+
+    .botanical-hero-tr {
+      top: 15px;
+      right: -25px;
+      width: 140px;
+      transform: rotate(20deg);
+    }
+
+    .botanical-countdown-bl {
+      bottom: -35px;
+      left: -20px;
+      width: 130px;
+      transform: rotate(-35deg);
+      opacity: 0.75;
+    }
+
+    .botanical-dress-tr {
+      top: 20px;
+      right: -20px;
+      width: 125px;
+      transform: rotate(15deg);
+      opacity: 0.8;
+    }
+
+    .botanical-registry-br {
+      bottom: -25px;
+      right: -15px;
+      width: 135px;
+      transform: rotate(-15deg);
     }
 
     /* -------------------------------------------
@@ -435,9 +825,7 @@
       line-height: 1.55;
     }
 
-    /* ==============================================
-       DRESS CODE COLOR SWATCHES (HORIZONTAL ROW)
-    ============================================== */
+    /* Color Swatches (Strict Horizontal Row) */
     .swatch-container {
       margin: 1.5rem auto 1.25rem;
       width: 100%;
@@ -566,9 +954,7 @@
       line-height: 1.45;
     }
 
-    /* ==============================================
-       BORDERLESS EDITORIAL RSVP GUEST ROWS
-    ============================================== */
+    /* Borderless RSVP Guest Rows */
     .guest-rsvp-list {
       display: flex;
       flex-direction: column;
@@ -577,7 +963,6 @@
       margin: 0 auto 2.2rem;
     }
 
-    /* Completely borderless, seamless stationery row */
     .guest-rsvp-card {
       background: transparent;
       border: none;
@@ -587,7 +972,6 @@
       position: relative;
     }
 
-    /* Thin delicate antique gold divider between multiple guests */
     .guest-rsvp-card:not(:last-child)::after {
       content: "";
       position: absolute;
@@ -598,7 +982,6 @@
       background: linear-gradient(90deg, transparent, rgba(180, 147, 88, 0.35), transparent);
     }
 
-    /* Refined, high-fashion serif guest title */
     .guest-name-label {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.55rem;
@@ -610,7 +993,6 @@
       letter-spacing: 0.02em;
     }
 
-    /* Refined Minimalist Response Toggles */
     .rsvp-button-pair {
       display: flex;
       justify-content: center;
@@ -626,7 +1008,7 @@
       background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(4px);
       color: var(--text-dark);
-      border-radius: 24px; /* Soft luxury pill contour */
+      border-radius: 24px;
       font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.64rem;
       letter-spacing: 0.16em;
@@ -642,7 +1024,6 @@
       background: rgba(255, 255, 255, 0.75);
     }
 
-    /* Active: Joyfully Accept — Warm Rich Burnished Gold */
     .choice-btn.accept.active {
       background: #96713B;
       border-color: #96713B;
@@ -652,7 +1033,6 @@
       transform: translateY(-1px);
     }
 
-    /* Active: Regretfully Decline — Muted Linen Charcoal */
     .choice-btn.decline.active {
       background: #6a5a47;
       border-color: #6a5a47;
@@ -662,7 +1042,6 @@
       transform: translateY(-1px);
     }
 
-    /* Primary Flat Action Button */
     .btn-rsvp-submit {
       display: inline-block;
       width: 100%;
@@ -675,7 +1054,7 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       font-weight: 500;
-      border-radius: 25px; /* Matched luxury pill shape */
+      border-radius: 25px;
       border: 1px solid #574630;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(87, 70, 48, 0.18);
@@ -706,7 +1085,7 @@
        WISHING WELL / REGISTRY SECTION
     ============================================== */
     .registry-section {
-      padding: 3.5rem 1.5rem 3rem; /* Generous top & bottom breathing room */
+      padding: 3.5rem 1.5rem 3rem;
       background: transparent;
       text-align: center;
       position: relative;
@@ -728,7 +1107,7 @@
       background: #FAF7F2;
       border: 1px solid rgba(180, 147, 88, 0.35);
       border-radius: 8px;
-      padding: 3rem 1.85rem 2.5rem; /* Expanded interior padding */
+      padding: 3rem 1.85rem 2.5rem;
       max-width: 360px;
       margin: 0 auto;
       box-shadow: 0 4px 18px rgba(96, 69, 29, 0.06);
@@ -791,7 +1170,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* Styled exactly like .btn-rsvp-submit */
     .btn-copy-account {
       display: inline-block;
       width: 100%;
@@ -804,7 +1182,7 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       font-weight: 500;
-      border-radius: 25px; /* Matched luxury pill contour */
+      border-radius: 25px;
       border: 1px solid #574630;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(87, 70, 48, 0.18);
@@ -850,387 +1228,6 @@
       font-size: 2.8rem;
       color: var(--gold-dark);
     }
-
-    /* Crisp, High-Contrast Luxury Letterpress Typography */
-    .env-guest-callout {
-      position: absolute;
-      top: 25%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 88%;
-      max-width: 350px;
-      text-align: center;
-      z-index: 6;
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .guest-pretitle {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: #7d6342; /* Deep warm bronze */
-      display: block;
-      margin-bottom: 0.6rem;
-      font-weight: 600;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-    }
-
-    .guest-family-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(2.1rem, 6.5vw, 2.7rem);
-      font-style: italic;
-      color: #2e2114; /* Rich deep espresso for crisp readability */
-      line-height: 1.18;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      text-shadow: 
-        0 1px 2px rgba(255, 255, 255, 0.95),
-        0 0 1px rgba(255, 255, 255, 0.8);
-    }
-
-    .envelope-wrapper.open .env-guest-callout {
-      opacity: 0;
-      transform: translate(-50%, -65%) scale(0.95);
-    }
-
-    html.envelope-locked,
-    body.envelope-locked {
-      overflow: hidden !important;
-      height: 100% !important;
-      height: 100dvh !important;
-      overscroll-behavior: none !important;
-    }
-
-    /* ==============================================
-       REALISTIC TEXTURED 3D ENVELOPE (LOCKED TO CARD)
-    ============================================== */
-    #envelope-overlay {
-      position: absolute; /* Locks directly inside <body> — 100% flush with no white strip */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100dvh;
-      z-index: 99999;
-      perspective: 1600px;
-      overflow: hidden;
-      background: transparent !important;
-      pointer-events: auto;
-    }
-
-    #envelope-overlay.unwrapped {
-      display: none !important;
-      pointer-events: none;
-    }
-
-    .envelope-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100dvh;
-      cursor: pointer;
-      overflow: hidden;
-      perspective: 1600px;
-      background: transparent !important;
-    }
-
-    /* ==============================================
-       GPU-ACCELERATED MOBILE-OPTIMIZED FLAPS
-    ============================================== */
-
-    /* Force hardware composition on all flaps */
-    .env-flap-left,
-    .env-flap-right,
-    .env-flap-bottom,
-    .env-flap-top {
-      background-color: #ede4d3;
-      background-image: 
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.25) 0%, transparent 80%),
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperFibers'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='6' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23ffffff' surfaceScale='2.2' result='light'%3E%3CfeDistantLight azimuth='55' elevation='58'/%3E%3C/feDiffuseLighting%3E%3CfeBlend mode='multiply' in='SourceGraphic' in2='light'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperFibers)' fill='%23ede4d3'/%3E%3C/svg%3E");
-      background-size: 260px 260px;
-      background-repeat: repeat;
-      
-      /* GPU Acceleration Flags */
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    /* 1. TOP FLAP: Natural crease with zero drop-shadow lag */
-    .env-flap-top {
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      width: calc(100% + 2px);
-      height: 50.5%;
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      transform-origin: top center;
-      z-index: 5;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
-      box-shadow: 0 10px 24px rgba(60, 42, 18, 0.22);
-    }
-
-    /* 2. BOTTOM FLAP */
-    .env-flap-bottom {
-      position: absolute;
-      bottom: -1px;
-      left: -1px;
-      width: calc(100% + 2px);
-      height: 50.5%;
-      clip-path: polygon(0 100%, 50% 0, 100% 100%);
-      transform-origin: bottom center;
-      z-index: 4;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
-      box-shadow: 0 -8px 20px rgba(60, 42, 18, 0.16);
-    }
-
-    /* 3. LEFT FLAP */
-    .env-flap-left {
-      position: absolute;
-      top: -1px;
-      left: -2px;
-      width: calc(50.5% + 2px);
-      height: calc(100% + 2px);
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
-      transform-origin: left center;
-      z-index: 3;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
-      box-shadow: 5px 0 16px rgba(60, 42, 18, 0.12);
-    }
-
-    /* 4. RIGHT FLAP */
-    .env-flap-right {
-      position: absolute;
-      top: -1px;
-      right: -2px;
-      width: calc(50.5% + 2px);
-      height: calc(100% + 2px);
-      clip-path: polygon(100% 0, 0 50%, 100% 100%);
-      transform-origin: right center;
-      z-index: 3;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
-      box-shadow: -5px 0 16px rgba(60, 42, 18, 0.12);
-    }
-
-    /* Wax Seal Button Optimization */
-    .env-seal-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 105px;
-      height: 105px;
-      border-radius: 50%;
-      z-index: 7;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: transparent;
-      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
-      transition: transform 0.4s ease, opacity 0.4s ease;
-      will-change: transform, opacity;
-      overflow: hidden;
-    }
-
-   
-
-    .seal-graphic-img {
-      width: 120%;
-      height: 120%;
-      object-fit: cover;
-      transform: scale(1.1);
-      border-radius: 50%;
-      display: block;
-      pointer-events: none;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    .env-seal-button:hover {
-      transform: translate(-50%, -50%) scale(1.05);
-    }
-
-    /* Outward Opening Action */
-    .envelope-wrapper.open .env-flap-top {
-      transform: rotateX(180deg);
-    }
-
-    .envelope-wrapper.open .env-flap-bottom {
-      transform: rotateX(-180deg);
-    }
-
-    .envelope-wrapper.open .env-flap-left {
-      transform: rotateY(-180deg);
-    }
-
-    .envelope-wrapper.open .env-flap-right {
-      transform: rotateY(180deg);
-    }
-
-    .envelope-wrapper.open .env-seal-button {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(1.18);
-      pointer-events: none;
-    }
-
-    .envelope-wrapper.open .env-guest-callout {
-      opacity: 0;
-      transform: translate(-50%, -65%) scale(0.95);
-    }
-
-    /* ==============================================
-       BORDERLESS EDITORIAL INVITATION HERO
-    ============================================== */
-    .formal-plaque-section {
-      padding: calc(3.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
-      background: transparent;
-      text-align: center;
-    }
-
-    .plaque-frame {
-      border: none;
-      outline: none;
-      box-shadow: none;
-      background: transparent;
-      padding: 0;
-      margin: 0 auto;
-      max-width: 360px;
-      text-align: center;
-    }
-
-    .plaque-eyebrow {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-    }
-
-    .plaque-title-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(3rem, 11vw, 4rem);
-      font-weight: 400;
-      color: var(--text-dark);
-      line-height: 1;
-      letter-spacing: 0.02em;
-      margin: 0;
-    }
-
-    .plaque-ampersand {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 2.1rem;
-      color: var(--gold);
-      margin: 0.35rem 0;
-      display: block;
-      line-height: 1;
-    }
-
-    .plaque-rule {
-      width: 44px;
-      height: 1px;
-      background: var(--gold);
-      margin: 1.75rem auto;
-      opacity: 0.55;
-    }
-
-    .plaque-pleasure {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 1.12rem;
-      color: var(--text-dark);
-      line-height: 1.75;
-      margin-bottom: 1.5rem;
-      opacity: 0.9;
-    }
-
-    .plaque-big-date {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 2rem;
-      letter-spacing: 0.12em;
-      color: var(--text-dark);
-      font-weight: 500;
-      margin-bottom: 0.35rem;
-    }
-
-    .plaque-location-sub {
-      font-family: 'Montserrat', system-ui, sans-serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 1.8rem;
-    }
-
-    .plaque-family-target {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.75rem;
-      font-weight: 500;
-      font-style: italic;
-      color: var(--text-dark);
-      margin: 0.35rem 0 0.85rem;
-    }
-
-    .plaque-individual-names {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.18rem;
-      color: var(--text-muted);
-      margin-bottom: 1.75rem;
-    }
-
-    /* ==============================================
-       EDITORIAL BOTANICAL ACCENTS
-    ============================================== */
-    .botanical-accent {
-      position: absolute;
-      pointer-events: none;
-      z-index: 1; /* Sits gently behind card text */
-      opacity: 0.88;
-      filter: drop-shadow(0 4px 12px rgba(60, 45, 20, 0.1));
-      transition: transform 0.6s ease;
-    }
-
-    /* 1. Floral branch hugging the top right hero plaque */
-    .botanical-hero-tr {
-      top: 15px;
-      right: -25px;
-      width: 140px;
-      transform: rotate(20deg);
-    }
-
-    /* 2. Olive foliage sweeping out from under Countdown date badge */
-    .botanical-countdown-bl {
-      bottom: -35px;
-      left: -20px;
-      width: 130px;
-      transform: rotate(-35deg);
-      opacity: 0.75;
-    }
-
-    /* 3. Ruscus branch trailing behind the Dress Code */
-    .botanical-dress-tr {
-      top: 20px;
-      right: -20px;
-      width: 125px;
-      transform: rotate(15deg);
-      opacity: 0.8;
-    }
-
-    /* 4. Elegant floral corner peeking beside the Wishing Well */
-    .botanical-registry-br {
-      bottom: -25px;
-      right: -15px;
-      width: 135px;
-      transform: rotate(-15deg);
-    }
   </style>
 </head>
 <body class="envelope-locked">
@@ -1247,11 +1244,10 @@
       <div class="env-flap-bottom"></div>
       <div class="env-flap-top" id="envFlap"></div>
 
-      <p class="plaque-eyebrow">Especially Invited</p>
-      <h2 class="plaque-family-target" id="plaqueFamilyTitle">Our Dearest Family &amp; Friends</h2>
-      
-      <div class="plaque-individual-names" id="plaqueMemberList">
-        <span>Honoured Guests</span>
+      <!-- Personalized Dynamic Guest Plaque on Envelope Front -->
+      <div class="env-guest-callout" id="envGuestBox">
+        <span class="guest-pretitle">A special invitation for</span>
+        <h2 class="guest-family-name" id="guestFamilyName">Our Dearest Family &amp; Friends</h2>
       </div>
 
       <!-- Centered Gold Seal -->
@@ -1342,8 +1338,8 @@
       <img src="reception.png" alt="The Reception" class="art-img reception-art" />
       <h3 class="script-title event-heading">The Reception</h3>
       <p class="event-time">5:30 PM</p>
-      <p class="event-venue">The Grand Pavilion • The Unalome Venue</p>
-      <p class="event-subvenue">Dinner, Toasts &amp; Celebration</p>
+      <p class="event-venue">The Unalome Venue</p>
+      <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
       <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
         View Location
       </a>
@@ -1420,7 +1416,6 @@
        7. DRESS CODE (WATERCOLOR SEAMLESS WASH)
   =============================================== -->
   <section class="dress-code-section reveal">
-  
     <h3 class="script-title dress-heading">Dress Code</h3>
     <p class="attire-type">Formal Elegance</p>
     
@@ -1488,9 +1483,7 @@
        REGISTRY / WISHING WELL (BANKING DETAILS)
   =============================================== -->
   <section class="registry-section reveal">
-
-      <img src="green4.png" alt="" class="botanical-accent botanical-registry-br" loading="lazy" />
-    
+    <div class="registry-card">
       <span class="registry-eyebrow">A Note On Gifts</span>
       <h3 class="script-title registry-title">Wishing Well</h3>
       <p class="registry-note">
@@ -1519,7 +1512,7 @@
       <button type="button" class="btn-copy-account" id="copyAccBtn" onclick="copyAccountNumber()">
         Copy Account Number
       </button>
-    
+    </div>
   </section>
 
   <!-- ==============================================
@@ -1577,10 +1570,16 @@
       envelope.style.pointerEvents = 'none';
       envelope.classList.add('open');
 
+      // Do NOT unlock scrollbar here — keeping it locked stops the horizontal shift completely!
+
       setTimeout(() => {
         overlay.classList.add('unwrapped');
         overlay.style.display = 'none';
-      }, 1800);
+
+        // Unlock scrollbars ONLY after the unwrap is completely done
+        document.documentElement.classList.remove('envelope-locked');
+        document.body.classList.remove('envelope-locked');
+      }, 1600);
     }
 
     /* ==========================================================
@@ -1837,23 +1836,6 @@
     }
 
     window.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
-
-    function openEnvelopeSequence() {
-      const envelope = document.getElementById('envelopeWrapper');
-      const overlay = document.getElementById('envelope-overlay');
-
-      envelope.style.pointerEvents = 'none';
-      envelope.classList.add('open');
-
-      // Release scroll lock immediately as flaps start unfolding
-      document.documentElement.classList.remove('envelope-locked');
-      document.body.classList.remove('envelope-locked');
-
-      setTimeout(() => {
-        overlay.classList.add('unwrapped');
-        overlay.style.display = 'none';
-      }, 1800);
-    }
   </script>
 </body>
 </html>
