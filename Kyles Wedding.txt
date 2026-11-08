@@ -7,6 +7,10 @@
   <title>Kyle &amp; Kevona — Wedding Celebration</title>
   
   <!-- Curated Luxury Editorial Fonts -->
+   <!-- Pre-connect and warm up Google Sheets CSV pipeline -->
+  <link rel="preconnect" href="https://docs.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://docs.google.com">
+  <link rel="preload" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv" as="fetch" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
@@ -156,7 +160,7 @@
       will-change: transform;
     }
 
-    /* 1. TOP FLAP */
+    /* 1. TOP FLAP: Hinges upward first as the seal breaks */
     .env-flap-top {
       position: absolute;
       top: -1px;
@@ -166,11 +170,12 @@
       clip-path: polygon(0 0, 100% 0, 50% 100%);
       transform-origin: top center;
       z-index: 5;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      /* Balanced, weighted paper easing: opens first */
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1);
       box-shadow: 0 10px 24px rgba(60, 42, 18, 0.22);
     }
 
-    /* 2. BOTTOM FLAP */
+    /* 2. BOTTOM FLAP: Follows slightly after the top flap */
     .env-flap-bottom {
       position: absolute;
       bottom: -1px;
@@ -180,11 +185,11 @@
       clip-path: polygon(0 100%, 50% 0, 100% 100%);
       transform-origin: bottom center;
       z-index: 4;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1) 120ms;
       box-shadow: 0 -8px 20px rgba(60, 42, 18, 0.16);
     }
 
-    /* 3. LEFT FLAP */
+    /* 3. LEFT FLAP: Unfolds gracefully outwards */
     .env-flap-left {
       position: absolute;
       top: -1px;
@@ -194,11 +199,11 @@
       clip-path: polygon(0 0, 100% 50%, 0 100%);
       transform-origin: left center;
       z-index: 3;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
       box-shadow: 5px 0 16px rgba(60, 42, 18, 0.12);
     }
 
-    /* 4. RIGHT FLAP */
+    /* 4. RIGHT FLAP: Unfolds gracefully outwards */
     .env-flap-right {
       position: absolute;
       top: -1px;
@@ -208,8 +213,30 @@
       clip-path: polygon(100% 0, 0 50%, 100% 100%);
       transform-origin: right center;
       z-index: 3;
-      transition: transform 1600ms cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 1800ms cubic-bezier(0.4, 0.08, 0.25, 1) 180ms;
       box-shadow: -5px 0 16px rgba(60, 42, 18, 0.12);
+    }
+
+    /* Wax Seal dissolves smoothly on tap */
+    .env-seal-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      z-index: 7;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
+      transition: transform 1200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
+      will-change: transform, opacity;
+      overflow: hidden;
     }
 
     /* Envelope Front Callout */
@@ -223,7 +250,7 @@
       text-align: center;
       z-index: 6;
       pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transition: opacity 0.5s ease, transform 0.4s ease;
     }
 
     .guest-pretitle {
@@ -249,28 +276,6 @@
       text-shadow: 
         0 1px 2px rgba(255, 255, 255, 0.95),
         0 0 1px rgba(255, 255, 255, 0.8);
-    }
-
-    /* Wax Seal Button */
-    .env-seal-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 105px;
-      height: 105px;
-      border-radius: 50%;
-      z-index: 7;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: transparent;
-      box-shadow: 0 16px 32px rgba(45, 28, 10, 0.45);
-      transition: transform 0.4s ease, opacity 0.4s ease;
-      will-change: transform, opacity;
-      overflow: hidden;
     }
 
     .seal-graphic-img {
@@ -1300,7 +1305,7 @@
   <section class="location-section">
     <!-- Holy Ceremony (holy_matrimony.png) -->
     <div class="event-block reveal" id="ceremony-event-card">
-      <img src="holy_matrimony.png" alt="Holy Ceremony" class="art-img church-art" />
+      <img src="the_reception.png" alt="Holy Ceremony" class="art-img church-art" />
       <h3 class="script-title event-heading">Holy Matrimony</h3>
       <p class="event-time">2:30 PM</p>
       <p class="event-venue">The Unalome Venue</p>
@@ -1312,11 +1317,11 @@
 
     <!-- The Reception (the_reception.png) -->
     <div class="event-block reveal">
-      <img src="the_reception.png" alt="The Reception" class="art-img reception-art" />
+      <img src="reception.png" alt="The Reception" class="art-img reception-art" />
       <h3 class="script-title event-heading">The Reception</h3>
       <p class="event-time">5:30 PM</p>
-      <p class="event-venue">The Grand Pavilion • The Unalome Venue</p>
-      <p class="event-subvenue">Dinner, Toasts &amp; Celebration</p>
+      <p class="event-venue">The Unalome Venue</p>
+      <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
       <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
         View Location
       </a>
@@ -1461,8 +1466,6 @@
   =============================================== -->
   <section class="registry-section reveal">
     <div class="registry-card">
-      <img src="green1.png" alt="" class="botanical-accent botanical-registry-br" loading="lazy" />
-    
       <span class="registry-eyebrow">A Note On Gifts</span>
       <h3 class="script-title registry-title">Wishing Well</h3>
       <p class="registry-note">
@@ -1549,29 +1552,37 @@
       envelope.style.pointerEvents = 'none';
       envelope.classList.add('open');
 
-      // Release scroll lock immediately as flaps start unfolding
-      document.documentElement.classList.remove('envelope-locked');
-      document.body.classList.remove('envelope-locked');
+      // Do NOT unlock scrollbar here — keeping it locked stops the horizontal shift completely!
 
       setTimeout(() => {
         overlay.classList.add('unwrapped');
         overlay.style.display = 'none';
-      }, 1800);
+
+        // Unlock scrollbars ONLY after the unwrap is completely done
+        document.documentElement.classList.remove('envelope-locked');
+        document.body.classList.remove('envelope-locked');
+      }, 1600);
     }
 
     /* ==========================================================
-       LIVE GOOGLE SHEET INTEGRATION (KYLE & KEVONA WEDDING)
+       BULLETPROOF GOOGLE SHEET DATA LOADER & RSVP WRITEBACK
     ========================================================== */
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
     
-    // Paste your Google Apps Script Web App URL from Step 2 here:
-    const GOOGLE_SCRIPT_WEBHOOK_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+    // Ensure this is your deployed Apps Script Web App URL:
+    const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwT4DHb2hIJo513G7ElIBR0E75m9qsfTtMaIHkUcU-eobuPUi6djk7NgdNqV_KqmLA/exec";
+                                    
+    const urlParams = new URLSearchParams(window.location.search);
+    const rowIdParam = urlParams.get("id");
+    const rawSearchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").trim();
 
-    let currentFamilyTitle = "Our Dearest Family & Friends";
-    let currentSurname = "";
+    let currentSurname = rawSearchSurname;
+    let currentFamilyTitle = rawSearchSurname 
+      ? `${rawSearchSurname.charAt(0).toUpperCase() + rawSearchSurname.slice(1)} Family Invitation`
+      : "Our Dearest Family & Friends";
     let currentMemberList = ["Honoured Guest"];
     let hasCeremonyInvite = true;
-    let currentRowId = null;
+    let currentRowId = rowIdParam || null; // Always initialize directly from URL
     const rsvpResponses = {};
 
     function parseCSVLine(line) {
@@ -1597,88 +1608,99 @@
       updateEnvelopeAndPlaque();
       renderFamilyRSVP();
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const rowIdParam = urlParams.get("id");
-      const searchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").toLowerCase().trim();
+      if (!rowIdParam && !rawSearchSurname) return;
 
-      if (rowIdParam || searchSurname) {
-        try {
-          const res = await fetch(SHEET_CSV_URL);
-          const csvText = await res.text();
-          const lines = csvText.trim().split(/\r?\n/);
+      try {
+        // Direct, single fetch with cache bypass so live edits in the sheet reflect immediately
+        const res = await fetch(SHEET_CSV_URL + "&_t=" + Date.now());
+        const csvText = await res.text();
+        const lines = csvText.trim().split(/\r?\n/);
 
-          let headerIndex = lines.findIndex(l => {
-            const lower = l.toLowerCase();
-            return lower.includes("surname") && lower.includes("family members");
-          });
-          if (headerIndex === -1) headerIndex = 2;
+        let headerIndex = lines.findIndex(l => {
+          const lower = l.toLowerCase();
+          return lower.includes("surname") && lower.includes("family members");
+        });
+        if (headerIndex === -1) headerIndex = 2; // Row 3 is index 2
 
-          const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
+        const rawHeaders = parseCSVLine(lines[headerIndex]).map(h => h.toLowerCase());
 
-          let matchedRow = null;
-          if (rowIdParam && !isNaN(rowIdParam)) {
-            const targetIndex = parseInt(rowIdParam, 10) - 1;
-            if (lines[targetIndex]) {
-              const vals = parseCSVLine(lines[targetIndex]);
-              matchedRow = {};
-              rawHeaders.forEach((h, idx) => matchedRow[h] = vals[idx] || "");
-              currentRowId = rowIdParam;
-            }
+        let matchedRow = null;
+
+        // 1. Match by Row ID (?id=4 -> line index 3)
+        if (rowIdParam && !isNaN(rowIdParam)) {
+          const targetIndex = parseInt(rowIdParam, 10) - 1;
+          if (lines[targetIndex]) {
+            const vals = parseCSVLine(lines[targetIndex]);
+            matchedRow = {};
+            rawHeaders.forEach((h, idx) => matchedRow[h] = vals[idx] || "");
+            currentRowId = rowIdParam;
           }
-
-          if (!matchedRow && searchSurname) {
-            for (let i = headerIndex + 1; i < lines.length; i++) {
-              const vals = parseCSVLine(lines[i]);
-              const row = {};
-              rawHeaders.forEach((h, idx) => row[h] = vals[idx] || "");
-
-              const rowSurname = (row["surname"] || "").toLowerCase().trim();
-              const rowName = (row["name"] || "").toLowerCase().trim();
-
-              if (rowSurname === searchSurname || rowName === searchSurname) {
-                matchedRow = row;
-                currentRowId = i + 1;
-                break;
-              }
-            }
-          }
-
-          if (matchedRow) {
-            const surnameVal = matchedRow["surname"] ? matchedRow["surname"].trim() : "";
-            const primaryName = matchedRow["name"] ? matchedRow["name"].trim() : "";
-            const rawMembers = matchedRow["family members"] || "";
-            const ceremonyVal = (matchedRow["ceremony"] || "").toLowerCase().trim();
-
-            currentSurname = surnameVal;
-
-            if (surnameVal) {
-              currentFamilyTitle = `${surnameVal} Family Invitation`;
-            } else if (primaryName) {
-              currentFamilyTitle = `${primaryName} Family Invitation`;
-            }
-
-            const members = [];
-            if (primaryName) members.push(primaryName);
-            if (rawMembers) {
-              rawMembers.split(/[,&]/).forEach(m => {
-                const clean = m.trim();
-                if (clean && !members.some(e => e.toLowerCase() === clean.toLowerCase())) {
-                  members.push(clean);
-                }
-              });
-            }
-            if (members.length > 0) currentMemberList = members;
-
-            hasCeremonyInvite = (ceremonyVal === "yes");
-          }
-        } catch (err) {
-          console.warn("Could not load Google Sheet data. Falling back to defaults.", err);
         }
+
+        // 2. Match by Surname if ID didn't catch
+        const searchLower = rawSearchSurname.toLowerCase();
+        if (!matchedRow && searchLower) {
+          for (let i = headerIndex + 1; i < lines.length; i++) {
+            const vals = parseCSVLine(lines[i]);
+            const row = {};
+            rawHeaders.forEach((h, idx) => row[h] = vals[idx] || "");
+
+            const rowSurname = (row["surname"] || "").toLowerCase().trim();
+            const rowName = (row["name"] || "").toLowerCase().trim();
+
+            if (rowSurname === searchLower || rowName === searchLower) {
+              matchedRow = row;
+              currentRowId = i + 1; // Actual Google Sheet row number
+              break;
+            }
+          }
+        }
+
+        if (matchedRow) {
+          const surnameVal = matchedRow["surname"] ? matchedRow["surname"].trim() : "";
+          const primaryName = matchedRow["name"] ? matchedRow["name"].trim() : "";
+          const rawMembers = matchedRow["family members"] || "";
+          const ceremonyVal = (matchedRow["ceremony"] || "").toLowerCase().trim();
+
+          currentSurname = surnameVal;
+
+          if (surnameVal) {
+            currentFamilyTitle = `${surnameVal} Family Invitation`;
+          } else if (primaryName) {
+            currentFamilyTitle = `${primaryName} Family Invitation`;
+          }
+
+          const members = [];
+          if (primaryName) members.push(primaryName);
+          if (rawMembers) {
+            rawMembers.split(/[,&]/).forEach(m => {
+              const clean = m.trim();
+              if (clean && !members.some(e => e.toLowerCase() === clean.toLowerCase())) {
+                members.push(clean);
+              }
+            });
+          }
+          if (members.length > 0) currentMemberList = members;
+
+          hasCeremonyInvite = (ceremonyVal === "yes");
+        }
+      } catch (err) {
+        console.warn("Could not load Google Sheet data. Falling back to URL defaults.", err);
       }
 
       updateEnvelopeAndPlaque();
       updateCeremonyVisibility();
       renderFamilyRSVP();
+    }
+
+    // Call once when DOM is ready
+    window.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
+
+    // Run as fast as HTML elements are available
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadGuestDataFromSheet);
+    } else {
+      loadGuestDataFromSheet();
     }
 
     function updateEnvelopeAndPlaque() {
@@ -1750,49 +1772,51 @@
     }
 
     async function sendFamilyRSVP() {
+      // 1. Ensure every invited family member has made a selection
       if (Object.keys(rsvpResponses).length < currentMemberList.length) {
-        alert("Please make a selection (Accept or Decline) for all invited family members before submitting.");
+        alert("Please make a selection (Accepts or Declines) for all invited family members before submitting.");
         return;
       }
 
       const submitBtn = document.getElementById("submitRsvpBtn");
+      const statusMsg = document.getElementById('rsvpStatusMsg');
+      
       submitBtn.disabled = true;
       submitBtn.textContent = "Recording RSVP...";
+      statusMsg.textContent = "Submitting your response to Kyle & Kevona...";
 
+      // 2. Separate accepted guests from declined guests
       const attendingMembers = Object.keys(rsvpResponses).filter(
         name => rsvpResponses[name] === "Attending"
       );
 
-      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
+      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycbwT4DHb2hIJo513G7ElIBR0E75m9qsfTtMaIHkUcU-eobuPUi6djk7NgdNqV_KqmLA/exec") {
         try {
+          const payload = new URLSearchParams();
+          payload.append("rowId", currentRowId);
+          payload.append("surname", currentSurname || currentFamilyTitle);
+          payload.append("attendingMembers", attendingMembers.length > 0 ? attendingMembers.join(", ") : "None (All Declined)");
+
           await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              rowId: currentRowId,
-              surname: currentSurname || currentFamilyTitle,
-              attendingMembers: attendingMembers.length > 0 ? attendingMembers : ["None (All Declined)"]
-            })
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: payload.toString()
           });
+
+          submitBtn.textContent = "RSVP Confirmed";
+          submitBtn.style.background = "#96713B";
+          submitBtn.style.borderColor = "#96713B";
+          statusMsg.textContent = "Thank you! Your RSVP has been recorded successfully.";
         } catch (err) {
           console.warn("Could not post to sheet webhook:", err);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Family RSVP";
+          statusMsg.textContent = "Unable to reach the guest list. Please check your connection and try again.";
         }
       }
-
-      let summaryText = `*Wedding RSVP - ${currentFamilyTitle}*\n\n`;
-      for (const [name, status] of Object.entries(rsvpResponses)) {
-        summaryText += `• ${name}: ${status === 'Attending' ? '✅ Joyfully Accepts' : '❌ Regretfully Declines'}\n`;
-      }
-
-      const organizerWhatsApp = "27821234567";
-      const whatsappURL = `https://wa.me/${organizerWhatsApp}?text=${encodeURIComponent(summaryText)}`;
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Family RSVP";
-      document.getElementById('rsvpStatusMsg').textContent = "RSVP recorded! Opening WhatsApp...";
-
-      window.open(whatsappURL, '_blank');
     }
 
     function copyAccountNumber() {

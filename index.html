@@ -1785,15 +1785,19 @@
       submitBtn.textContent = "Recording RSVP...";
       statusMsg.textContent = "Submitting your response to Kyle & Kevona...";
 
-      // 2. Separate accepted guests from declined guests
+      // 2. Separate accepted guests
       const attendingMembers = Object.keys(rsvpResponses).filter(
         name => rsvpResponses[name] === "Attending"
       );
 
-      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycbwT4DHb2hIJo513G7ElIBR0E75m9qsfTtMaIHkUcU-eobuPUi6djk7NgdNqV_KqmLA/exec") {
+      // 3. Fallback row ID extraction if missing
+      const effectiveRowId = currentRowId || new URLSearchParams(window.location.search).get("id") || "";
+
+      // 4. Send directly to your Google Apps Script Webhook
+      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL && !GOOGLE_SCRIPT_WEBHOOK_URL.includes("PASTE_YOUR")) {
         try {
           const payload = new URLSearchParams();
-          payload.append("rowId", currentRowId);
+          payload.append("rowId", effectiveRowId);
           payload.append("surname", currentSurname || currentFamilyTitle);
           payload.append("attendingMembers", attendingMembers.length > 0 ? attendingMembers.join(", ") : "None (All Declined)");
 
@@ -1816,6 +1820,10 @@
           submitBtn.textContent = "Submit Family RSVP";
           statusMsg.textContent = "Unable to reach the guest list. Please check your connection and try again.";
         }
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Family RSVP";
+        statusMsg.textContent = "Webhook URL not configured.";
       }
     }
 
