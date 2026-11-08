@@ -28,6 +28,9 @@
       --env-dark: #bba480;
       --text-dark: #574630;
       --text-muted: #82735d;
+      --olive-dark: #3f4a3c;       /* Deep heritage botanical olive */
+      --olive-muted: #5e6b5a;      /* Soft eucalyptus */
+      --olive-light: rgba(94, 107, 90, 0.15);
       --border-thin: rgba(180, 147, 88, 0.35);
     }
 
@@ -50,7 +53,6 @@
       max-width: 440px;
       margin: 0 auto;
       min-height: 100vh;
-      overflow-x: hidden;
       box-shadow: 0 0 50px rgba(96, 69, 29, 0.18);
       position: relative;
     }
@@ -330,6 +332,7 @@
       background: transparent;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
     .plaque-frame {
@@ -374,11 +377,19 @@
     }
 
     .plaque-rule {
-      width: 44px;
-      height: 1px;
-      background: var(--gold);
+      width: 46px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, #4e5a4a, transparent);
       margin: 1.75rem auto;
-      opacity: 0.55;
+      opacity: 0.6;
+    }
+
+    .plaque-eyebrow,
+    .countdown-title,
+    .rsvp-eyebrow,
+    .registry-eyebrow {
+      color: var(--olive-muted) !important;
+      letter-spacing: 0.28em;
     }
 
     .plaque-pleasure {
@@ -438,6 +449,7 @@
       opacity: 0.88;
       filter: drop-shadow(0 4px 12px rgba(60, 45, 20, 0.1));
       transition: transform 0.6s ease;
+      
     }
 
     .botanical-hero-tr {
@@ -448,11 +460,12 @@
     }
 
     .botanical-countdown-bl {
-      bottom: -35px;
+      bottom: -10px;
       left: -20px;
       width: 130px;
       transform: rotate(-35deg);
       opacity: 0.75;
+      z-index: 999;
     }
 
     .botanical-dress-tr {
@@ -480,6 +493,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      
     }
 
     .olive-panel::before {
@@ -1001,6 +1015,16 @@
       outline: none;
     }
 
+    /* Active: Joyfully Accept — Deep Tailored Forest Olive */
+    .choice-btn.accept.active {
+      background: #394734;
+      border-color: #394734;
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(57, 71, 52, 0.3);
+      transform: translateY(-1px);
+    }
+
     .choice-btn:hover {
       border-color: var(--gold);
       background: rgba(255, 255, 255, 0.75);
@@ -1210,6 +1234,75 @@
       font-size: 2.8rem;
       color: var(--gold-dark);
     }
+
+    /* ==============================================
+       BESPOKE BOTANICAL WATERCOLOR PLACEMENTS
+    ============================================== */
+    .botanical-img {
+      position: absolute;
+      pointer-events: none !important;
+      user-select: none !important;
+      -webkit-user-drag: none !important;
+      z-index: 999 !important; /* Always sits behind text and buttons */
+      mix-blend-mode: multiply; /* Melts naturally into ivory linen paper */
+    }
+
+    /* 1. Cascading White Jasmine Swag across top of Hero Plaque */
+    .swag-hero-top {
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 104%;
+      max-width: 460px;
+      opacity: 0.96;
+    }
+
+    /* 2. Eucalyptus Sprig flanking the Hero Plaque right side */
+    .branch-hero-right {
+      top: 140px;
+      right: -25px;
+      width: 130px;
+      transform: rotate(18deg);
+      opacity: 0.82;
+    }
+
+    .branch-hero-accent {
+      top: 15px;
+      right: -15px;
+      width: 110px;
+      transform: rotate(25deg);
+      opacity: 0.75;
+    }
+
+    /* 3. Eucalyptus Sprig peeking from Countdown bottom-left */
+    .branch-countdown-left {
+      bottom: -10px;
+      left: -20px;
+      width: 135px;
+      transform: rotate(-35deg) scaleX(-1); /* Flipped for natural flow */
+      opacity: 0.78;
+    }
+
+    /* 4. Magnolia Crest centering the Itinerary & Dress Code */
+    .crest-header-divider {
+      position: relative;
+      display: block;
+      margin: 0 auto 0.8rem;
+      width: 145px;
+      height: auto;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 10px rgba(60, 45, 20, 0.1));
+    }
+
+    /* 5. Eucalyptus Branch tucked behind Wishing Well Card */
+    .branch-registry-corner {
+      bottom: -35px;
+      right: -20px;
+      width: 140px;
+      transform: rotate(20deg);
+      opacity: 0.85;
+    }
+
   </style>
 </head>
 <body class="envelope-locked">
@@ -1243,7 +1336,9 @@
        BORDERLESS EDITORIAL INVITATION HERO
   =============================================== -->
   <section class="formal-plaque-section reveal">
-    <img src="green1.png" alt="" class="botanical-accent botanical-hero-tr" loading="lazy" />
+    
+    
+    <img src="green1.png" alt="" class="botanical-img branch-hero-right" loading="lazy" />
     <div class="plaque-frame">
       <p class="plaque-eyebrow">Together with their families</p>
       
@@ -1258,7 +1353,7 @@
       </p>
 
       <p class="plaque-big-date">27 . 02 . 2027</p>
-      <p class="plaque-location-sub">Saturday • The Unalome Venue • KwaZulu-Natal</p>
+      <p class="plaque-location-sub">Saturday • Unalome Bespoke Venue • KwaZulu-Natal</p>
 
       <div class="plaque-rule"></div>
 
@@ -1307,10 +1402,9 @@
     <div class="event-block reveal" id="ceremony-event-card">
       <img src="the_reception.png" alt="Holy Ceremony" class="art-img church-art" />
       <h3 class="script-title event-heading">Holy Matrimony</h3>
-      <p class="event-time">2:30 PM</p>
-      <p class="event-venue">The Unalome Venue</p>
-      <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
-      <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
+      <p class="event-time">2:00 PM</p>
+      <p class="event-venue">Unalome Bespoke Venue</p>
+      <a href="https://maps.apple.com/?daddr=-29.315220,31.345619&q=Unalome+Bespoke+Venue" class="btn-pill" target="_blank" rel="noopener">
         View Location
       </a>
     </div>
@@ -1318,15 +1412,24 @@
     <!-- The Reception (the_reception.png) -->
     <div class="event-block reveal">
       <img src="reception.png" alt="The Reception" class="art-img reception-art" />
-      <h3 class="script-title event-heading">The Reception</h3>
-      <p class="event-time">5:30 PM</p>
-      <p class="event-venue">The Unalome Venue</p>
-      <p class="event-subvenue">Valley View Garden Lawn • Inanda Valley</p>
-      <a href="https://maps.apple.com/?q=The+Unalome+Venue+Inanda+Valley&ll=-29.686567,30.825139" class="btn-pill" rel="noopener">
+      <h3 class="script-title event-heading">Reception</h3>
+      <p class="event-time">4:30 PM</p>
+      <p class="event-venue">Unalome Bespoke Venue</p>
+      <a href="https://maps.apple.com/?daddr=-29.315220,31.345619&q=Unalome+Bespoke+Venue" class="btn-pill" target="_blank" rel="noopener">      
         View Location
       </a>
     </div>
   </section>
+
+  <!-- The venue: Unalome Bespoke Venue not The Unalome Venue in Durban..... its actually the one near stanger....
+
+  Some adjustments to the timeline....
+  Ceremony: 14:00 to 15:00
+  Photos and Canape hour: 15:00 to 16:00
+  Seating: 16:00 to 16:30
+  Reception: 16:30 to 17:00
+  Supper: 18:00
+  First Dance: 19:00 -->
 
   <!-- ==============================================
        6. SERPENTINE ITINERARY
@@ -1336,58 +1439,69 @@
       <h2 class="script-title timeline-title">Order of Events</h2>
       
       <div class="serpentine-container">
-        <!-- 1. Ceremony (holy_matrimony.png) -->
+        <!-- 1. Ceremony: 14:00 to 15:00 -->
         <div class="serpentine-row reveal" id="timeline-ceremony-node">
           <div class="serpentine-node">
             <img src="holy_matrimony.png" alt="Ceremony" />
           </div>
           <div class="serpentine-meta right">
-            <span class="s-time">3:30 PM</span>
+            <span class="s-time">2:00 PM</span>
             <span class="s-desc">Ceremony</span>
           </div>
         </div>
 
-        <!-- 2. Champagne Toast (toast.png) -->
+        <!-- 2. Photos & Canapé Hour: 15:00 to 16:00 -->
         <div class="serpentine-row reveal">
           <div class="serpentine-meta left">
-            <span class="s-time">5:00 PM</span>
-            <span class="s-desc">Aperitivo &amp; Toast</span>
+            <span class="s-time">3:00 PM</span>
+            <span class="s-desc">Canapés &amp; Photos</span>
           </div>
           <div class="serpentine-node">
             <img src="toast.png" alt="Toast" />
           </div>
         </div>
 
-        <!-- 3. First Dance (first_dance.png) -->
+        <!-- 3. Guest Seating: 16:00 to 16:30 -->
         <div class="serpentine-row reveal">
           <div class="serpentine-node">
-            <img src="first_dance.png" alt="First Dance" />
+            <img src="the_reception.png" alt="Seating" />
           </div>
           <div class="serpentine-meta right">
-            <span class="s-time">6:45 PM</span>
-            <span class="s-desc">First Dance</span>
+            <span class="s-time">4:00 PM</span>
+            <span class="s-desc">Guest Seating</span>
           </div>
         </div>
 
-        <!-- 4. Banquet Dinner (dinner.png) -->
+        <!-- 4. Grand Entrance / Reception: 16:30 to 17:00 -->
         <div class="serpentine-row reveal">
           <div class="serpentine-meta left">
-            <span class="s-time">7:15 PM</span>
-            <span class="s-desc">Banquet Dinner</span>
+            <span class="s-time">4:30 PM</span>
+            <span class="s-desc">The Reception</span>
           </div>
           <div class="serpentine-node">
-            <img src="dinner.png" alt="Banquet Dinner" />
+            <img src="reception.png" alt="Reception" />
           </div>
         </div>
 
-        <!-- 5. Cake Cutting (cake cutting.png) -->
+        <!-- 5. Supper: 18:00 -->
         <div class="serpentine-row reveal">
           <div class="serpentine-node">
-            <img src="cake cutting.png" alt="Cake Cutting" />
+            <img src="dinner.png" alt="Supper" />
           </div>
           <div class="serpentine-meta right">
-            <span class="s-time">8:30 PM</span>
-            <span class="s-desc">Cake Cutting</span>
+            <span class="s-time">6:00 PM</span>
+            <span class="s-desc">Supper</span>
+          </div>
+        </div>
+
+        <!-- 6. First Dance: 19:00 -->
+        <div class="serpentine-row reveal">
+          <div class="serpentine-meta left">
+            <span class="s-time">7:00 PM</span>
+            <span class="s-desc">First Dance</span>
+          </div>
+          <div class="serpentine-node">
+            <img src="first_dance.png" alt="First Dance" />
           </div>
         </div>
       </div>
@@ -1528,7 +1642,7 @@
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     /* 2. Real-Time Countdown to February 27, 2027 */
-    const targetDate = new Date("February 27, 2027 15:30:00").getTime();
+    const targetDate = new Date("February 27, 2027 14:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -1785,15 +1899,19 @@
       submitBtn.textContent = "Recording RSVP...";
       statusMsg.textContent = "Submitting your response to Kyle & Kevona...";
 
-      // 2. Separate accepted guests from declined guests
+      // 2. Separate accepted guests
       const attendingMembers = Object.keys(rsvpResponses).filter(
         name => rsvpResponses[name] === "Attending"
       );
 
-      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycbwT4DHb2hIJo513G7ElIBR0E75m9qsfTtMaIHkUcU-eobuPUi6djk7NgdNqV_KqmLA/exec") {
+      // 3. Fallback row ID extraction if missing
+      const effectiveRowId = currentRowId || new URLSearchParams(window.location.search).get("id") || "";
+
+      // 4. Send directly to your Google Apps Script Webhook
+      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL && !GOOGLE_SCRIPT_WEBHOOK_URL.includes("PASTE_YOUR")) {
         try {
           const payload = new URLSearchParams();
-          payload.append("rowId", currentRowId);
+          payload.append("rowId", effectiveRowId);
           payload.append("surname", currentSurname || currentFamilyTitle);
           payload.append("attendingMembers", attendingMembers.length > 0 ? attendingMembers.join(", ") : "None (All Declined)");
 
@@ -1816,6 +1934,10 @@
           submitBtn.textContent = "Submit Family RSVP";
           statusMsg.textContent = "Unable to reach the guest list. Please check your connection and try again.";
         }
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Family RSVP";
+        statusMsg.textContent = "Webhook URL not configured.";
       }
     }
 

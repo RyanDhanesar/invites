@@ -28,6 +28,9 @@
       --env-dark: #bba480;
       --text-dark: #574630;
       --text-muted: #82735d;
+      --olive-dark: #3f4a3c;       /* Deep heritage botanical olive */
+      --olive-muted: #5e6b5a;      /* Soft eucalyptus */
+      --olive-light: rgba(94, 107, 90, 0.15);
       --border-thin: rgba(180, 147, 88, 0.35);
     }
 
@@ -329,6 +332,7 @@
       background: transparent;
       text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
     .plaque-frame {
@@ -373,11 +377,19 @@
     }
 
     .plaque-rule {
-      width: 44px;
-      height: 1px;
-      background: var(--gold);
+      width: 46px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, #4e5a4a, transparent);
       margin: 1.75rem auto;
-      opacity: 0.55;
+      opacity: 0.6;
+    }
+
+    .plaque-eyebrow,
+    .countdown-title,
+    .rsvp-eyebrow,
+    .registry-eyebrow {
+      color: var(--olive-muted) !important;
+      letter-spacing: 0.28em;
     }
 
     .plaque-pleasure {
@@ -428,46 +440,54 @@
     }
 
     /* ==============================================
-       EDITORIAL BOTANICAL ACCENTS
+       EDITORIAL BOTANICAL ACCENTS (green1.png ONLY)
     ============================================== */
     .botanical-accent {
       position: absolute;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.88;
-      filter: drop-shadow(0 4px 12px rgba(60, 45, 20, 0.1));
-      transition: transform 0.6s ease;
-      
+      pointer-events: none !important;
+      user-select: none !important;
+      -webkit-user-drag: none !important;
+      z-index: 0 !important; /* Always sits behind text and buttons */
+      mix-blend-mode: multiply; /* Melts naturally into the paper */
+      opacity: 0.85;
+      filter: drop-shadow(0 4px 10px rgba(60, 45, 20, 0.08));
     }
 
+    /* 1. Hero Plaque: Top-right corner frame (clear of all text) */
     .botanical-hero-tr {
-      top: 15px;
-      right: -25px;
-      width: 140px;
-      transform: rotate(20deg);
-    }
-
-    .botanical-countdown-bl {
-      bottom: -35px;
-      left: -20px;
-      width: 130px;
-      transform: rotate(-35deg);
-      opacity: 0.75;
-    }
-
-    .botanical-dress-tr {
-      top: 20px;
+      top: 10px;
       right: -20px;
       width: 125px;
+      transform: rotate(22deg);
+    }
+
+    /* 2. Countdown Panel: Sweeping out from bottom-left */
+    .botanical-countdown-bl {
+      bottom: -75px;
+      left: -45px;
+      width: 125px;
+      transform: rotate(-30deg) scaleX(-1);
+      opacity: 0.8;
+      z-index: 10 !important; /* Layers above the upcoming section header */
+    }
+
+    /* 3. Wishing Well Card: Tucked behind the bottom-right edge */
+    .botanical-registry-br {
+      bottom: -30px;
+      right: -20px;
+      width: 130px;
       transform: rotate(15deg);
       opacity: 0.8;
     }
 
-    .botanical-registry-br {
-      bottom: -25px;
-      right: -15px;
-      width: 135px;
-      transform: rotate(-15deg);
+    /* Ensure card contents always sit comfortably above greenery */
+    .plaque-frame,
+    .date-badge-box,
+    .countdown-grid,
+    .bank-details-box,
+    .btn-copy-account {
+      position: relative;
+      z-index: 2 !important;
     }
 
     /* -------------------------------------------
@@ -479,7 +499,8 @@
       padding: 4rem 1.75rem 3.5rem;
       text-align: center;
       position: relative;
-      overflow: hidden;
+      overflow: visible; /* Allows the leaves to spill naturally across the section seam */
+      z-index: 5;        /* Places the entire panel and its foliage above the section below */
     }
 
     .olive-panel::before {
@@ -567,6 +588,8 @@
     .location-section {
       padding: 3rem 1.75rem 1rem;
       text-align: center;
+      position: relative;
+      z-index: 1; /* Sits naturally under the draped foliage */
     }
 
     .event-block {
@@ -1001,6 +1024,16 @@
       outline: none;
     }
 
+    /* Active: Joyfully Accept — Deep Tailored Forest Olive */
+    .choice-btn.accept.active {
+      background: #394734;
+      border-color: #394734;
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(57, 71, 52, 0.3);
+      transform: translateY(-1px);
+    }
+
     .choice-btn:hover {
       border-color: var(--gold);
       background: rgba(255, 255, 255, 0.75);
@@ -1210,6 +1243,75 @@
       font-size: 2.8rem;
       color: var(--gold-dark);
     }
+
+    /* ==============================================
+       BESPOKE BOTANICAL WATERCOLOR PLACEMENTS
+    ============================================== */
+    .botanical-img {
+      position: absolute;
+      pointer-events: none !important;
+      user-select: none !important;
+      -webkit-user-drag: none !important;
+      z-index: 999 !important; /* Always sits behind text and buttons */
+      mix-blend-mode: multiply; /* Melts naturally into ivory linen paper */
+    }
+
+    /* 1. Cascading White Jasmine Swag across top of Hero Plaque */
+    .swag-hero-top {
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 104%;
+      max-width: 460px;
+      opacity: 0.96;
+    }
+
+    /* 2. Eucalyptus Sprig flanking the Hero Plaque right side */
+    .branch-hero-right {
+      top: 140px;
+      right: -25px;
+      width: 130px;
+      transform: rotate(18deg);
+      opacity: 0.82;
+    }
+
+    .branch-hero-accent {
+      top: 15px;
+      right: -15px;
+      width: 110px;
+      transform: rotate(25deg);
+      opacity: 0.75;
+    }
+
+    /* 3. Eucalyptus Sprig peeking from Countdown bottom-left */
+    .branch-countdown-left {
+      bottom: -10px;
+      left: -20px;
+      width: 135px;
+      transform: rotate(-35deg) scaleX(-1); /* Flipped for natural flow */
+      opacity: 0.78;
+    }
+
+    /* 4. Magnolia Crest centering the Itinerary & Dress Code */
+    .crest-header-divider {
+      position: relative;
+      display: block;
+      margin: 0 auto 0.8rem;
+      width: 145px;
+      height: auto;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 10px rgba(60, 45, 20, 0.1));
+    }
+
+    /* 5. Eucalyptus Branch tucked behind Wishing Well Card */
+    .branch-registry-corner {
+      bottom: -35px;
+      right: -20px;
+      width: 140px;
+      transform: rotate(20deg);
+      opacity: 0.85;
+    }
+
   </style>
 </head>
 <body class="envelope-locked">
@@ -1243,7 +1345,9 @@
        BORDERLESS EDITORIAL INVITATION HERO
   =============================================== -->
   <section class="formal-plaque-section reveal">
-    <img src="green1.png" alt="" class="botanical-accent botanical-hero-tr" loading="lazy" />
+    
+    
+    <img src="green1.png" alt="" class="botanical-img branch-hero-right" loading="lazy" />
     <div class="plaque-frame">
       <p class="plaque-eyebrow">Together with their families</p>
       
@@ -1275,6 +1379,7 @@
        4. SAND PANEL: BLESSING & COUNTDOWN
   =============================================== -->
   <section class="olive-panel">
+    <img src="green1.png" alt="" class="botanical-accent botanical-countdown-bl" loading="lazy" />
     <div class="reveal">
       <p class="panel-blessing">
         With the blessing of God and our families, we invite you to celebrate our holy union.
@@ -1485,6 +1590,7 @@
   =============================================== -->
   <section class="registry-section reveal">
     <div class="registry-card">
+      <img src="green1.png" alt="" class="botanical-accent botanical-registry-br" loading="lazy" />
       <span class="registry-eyebrow">A Note On Gifts</span>
       <h3 class="script-title registry-title">Wishing Well</h3>
       <p class="registry-note">
