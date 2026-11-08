@@ -1570,8 +1570,8 @@
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREohKecQNKmkdskV-lYGq_z-G6-50e_6Z7Wsj5Ln8YoIvYT9s7qvqmXRoRsnIYREgy1FNG23yguKIy/pub?gid=1410045307&single=true&output=csv";
     
     // Ensure this is your deployed Apps Script Web App URL:
-    const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby9aKXY3gxAnVbwbFmXHQwOY2Hvs_fnLstSSZL_cwcIk4ojL9_X9wRfL3UKAHh8hYcn/exec";
-
+    const GOOGLE_SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwT4DHb2hIJo513G7ElIBR0E75m9qsfTtMaIHkUcU-eobuPUi6djk7NgdNqV_KqmLA/exec";
+                                    
     const urlParams = new URLSearchParams(window.location.search);
     const rowIdParam = urlParams.get("id");
     const rawSearchSurname = (urlParams.get("surname") || urlParams.get("guest") || "").trim();
@@ -1790,21 +1790,22 @@
         name => rsvpResponses[name] === "Attending"
       );
 
-      // 3. Post directly to Google Apps Script Webhook
-      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycby9aKXY3gxAnVbwbFmXHQwOY2Hvs_fnLstSSZL_cwcIk4ojL9_X9wRfL3UKAHh8hYcn/exec") {
+      if (typeof GOOGLE_SCRIPT_WEBHOOK_URL !== "undefined" && GOOGLE_SCRIPT_WEBHOOK_URL !== "https://script.google.com/macros/s/AKfycbwT4DHb2hIJo513G7ElIBR0E75m9qsfTtMaIHkUcU-eobuPUi6djk7NgdNqV_KqmLA/exec") {
         try {
+          const payload = new URLSearchParams();
+          payload.append("rowId", currentRowId);
+          payload.append("surname", currentSurname || currentFamilyTitle);
+          payload.append("attendingMembers", attendingMembers.length > 0 ? attendingMembers.join(", ") : "None (All Declined)");
+
           await fetch(GOOGLE_SCRIPT_WEBHOOK_URL, {
             method: "POST",
-            mode: "no-cors", // Required for Google Apps Script Webhooks
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              rowId: currentRowId,
-              surname: currentSurname || currentFamilyTitle,
-              attendingMembers: attendingMembers.length > 0 ? attendingMembers : ["None (All Declined)"]
-            })
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: payload.toString()
           });
 
-          // Elegant on-screen confirmation
           submitBtn.textContent = "RSVP Confirmed";
           submitBtn.style.background = "#96713B";
           submitBtn.style.borderColor = "#96713B";
@@ -1815,12 +1816,6 @@
           submitBtn.textContent = "Submit Family RSVP";
           statusMsg.textContent = "Unable to reach the guest list. Please check your connection and try again.";
         }
-      } else {
-        // Fallback warning if Webhook URL hasn't been set yet
-        console.warn("Google Apps Script Webhook URL is not set yet.");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Family RSVP";
-        statusMsg.textContent = "Google Sheet Webhook URL not configured in script.";
       }
     }
 
